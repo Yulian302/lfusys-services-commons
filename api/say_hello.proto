@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option go_package = "github.com/Yulian302/lfu-services-commons/api";
+package api; service Greeter {
+    rpc SayHello (HelloReq) returns (HelloReply);
+}
+
+message HelloReq {
+    string name = 1;
+}
+
+message HelloReply{
+    string msg = 1;
+}

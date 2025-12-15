@@ -1,11 +1,14 @@
 package common
 
+import "github.com/Yulian302/lfusys-services-commons/jwt"
+
 type Config struct {
 	HTTPAddr string
 	GRPCAddr string
 	Env      string
 	Tracing  bool
 	*AWSConfig
+	*jwt.JWTConfig
 }
 
 func LoadConfig() Config {
@@ -15,6 +18,7 @@ func LoadConfig() Config {
 	awsAccessKeyId := EnvVar("AWS_ACCESS_KEY_ID", "")
 	awsSecretAccessKey := EnvVar("AWS_SECRET_ACCESS_KEY", "")
 	awsRegion := EnvVar("AWS_REGION", "eu-north-1")
+	jwtSecretKey := EnvVar("JWT_SECRET_KEY", "")
 
 	return Config{
 		HTTPAddr: httpAddr,
@@ -25,6 +29,9 @@ func LoadConfig() Config {
 			AWS_ACCESS_KEY_ID:     awsAccessKeyId,
 			AWS_SECRET_ACCESS_KEY: awsSecretAccessKey,
 			AWS_REGION:            awsRegion,
+		},
+		JWTConfig: &jwt.JWTConfig{
+			SECRET_KEY: jwtSecretKey,
 		},
 	}
 }

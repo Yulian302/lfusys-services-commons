@@ -1,6 +1,14 @@
 package common
 
-import "github.com/Yulian302/lfusys-services-commons/jwt"
+import (
+	"github.com/Yulian302/lfusys-services-commons/db"
+	"github.com/Yulian302/lfusys-services-commons/jwt"
+	"github.com/Yulian302/lfusys-services-commons/services"
+)
+
+type Service struct {
+	*services.UploadsConfig
+}
 
 type Config struct {
 	HTTPAddr         string
@@ -11,6 +19,8 @@ type Config struct {
 	UploadServiceUrl string
 	*AWSConfig
 	*jwt.JWTConfig
+	*db.DynamoDBConfig
+	*Service
 }
 
 func LoadConfig() Config {
@@ -23,6 +33,10 @@ func LoadConfig() Config {
 	awsRegion := EnvVar("AWS_REGION", "eu-north-1")
 	jwtSecretKey := EnvVar("JWT_SECRET_KEY", "")
 	uploadServiceUrl := EnvVar("UPLOAD_SERVICE_URL", "http://localhost:8080")
+	dbUsersTableName := EnvVar("DYNAMODB_USERS_TABLE_NAME", "users")
+	dbUploadsTableName := EnvVar("DYNAMODB_UPLOADS_TABLE_NAME", "uploads")
+	uploadsConfig := EnvVar("UPLOADS_ADDR", "localhost:8080")
+	awsBucketName := EnvVar("AWS_BUCKET_NAME", "lfusyschunks")
 
 	return Config{
 		HTTPAddr:         httpAddr,
@@ -38,6 +52,16 @@ func LoadConfig() Config {
 		},
 		JWTConfig: &jwt.JWTConfig{
 			SECRET_KEY: jwtSecretKey,
+		},
+		DynamoDBConfig: &db.DynamoDBConfig{
+			DynamoDbUsersTableName:   dbUsersTableName,
+			DynamoDbUploadsTableName: dbUploadsTableName,
+		},
+		Service: &Service{
+			UploadsConfig: &services.UploadsConfig{
+				UPLOADS_ADDR:    uploadsConfig,
+				AWS_BUCKET_NAME: awsBucketName,
+			},
 		},
 	}
 }

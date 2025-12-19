@@ -27,6 +27,14 @@ func (m *MockDynamoDbStore) Create(
 	return args.Error(0)
 }
 
+func (m *MockDynamoDbStore) FindExisting(
+	ctx context.Context,
+	email string,
+) (bool, error) {
+	args := m.Called(ctx, email)
+	return args.Bool(0), args.Error(1)
+}
+
 func (m *MockDynamoDbStore) ResetMock() {
 	m.ExpectedCalls = nil
 	m.Calls = nil

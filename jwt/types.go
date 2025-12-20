@@ -7,7 +7,8 @@ import (
 )
 
 type JWTConfig struct {
-	SECRET_KEY string
+	SECRET_KEY         string
+	REFRESH_SECRET_KEY string
 }
 
 type JWTClaims struct {
@@ -16,6 +17,7 @@ type JWTClaims struct {
 	ExpiresAt int64  `json:"exp"`
 	IssuedAt  int64  `json:"iat"`
 	Type      string `json:"type,omitempty"`
+	JTI       string `json:"jti"`
 }
 
 func (c JWTClaims) GetExpirationTime() (*jwt.NumericDate, error) {
@@ -40,4 +42,8 @@ func (c JWTClaims) GetSubject() (string, error) {
 
 func (c JWTClaims) GetAudience() (jwt.ClaimStrings, error) {
 	return nil, nil
+}
+
+func (c JWTClaims) GetJTI() (string, error) {
+	return c.JTI, nil
 }

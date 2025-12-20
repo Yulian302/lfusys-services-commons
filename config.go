@@ -32,7 +32,8 @@ func LoadConfig() Config {
 	awsSecretAccessKey := EnvVar("AWS_SECRET_ACCESS_KEY", "")
 	awsRegion := EnvVar("AWS_REGION", "eu-north-1")
 	jwtSecretKey := EnvVar("JWT_SECRET_KEY", "")
-	uploadServiceUrl := EnvVar("UPLOAD_SERVICE_URL", "http://localhost:8080")
+	jwtRefreshSecretKey := EnvVar("JWT_REFRESH_SECRET_KEY", "")
+	uploadServiceUrl := EnvVar("UPLOAD_SERVICE_URL", "http://localhost:8081")
 	dbUsersTableName := EnvVar("DYNAMODB_USERS_TABLE_NAME", "users")
 	dbUploadsTableName := EnvVar("DYNAMODB_UPLOADS_TABLE_NAME", "uploads")
 	uploadsConfig := EnvVar("UPLOADS_ADDR", "localhost:8080")
@@ -51,7 +52,8 @@ func LoadConfig() Config {
 			AWS_REGION:            awsRegion,
 		},
 		JWTConfig: &jwt.JWTConfig{
-			SECRET_KEY: jwtSecretKey,
+			SECRET_KEY:         jwtSecretKey,
+			REFRESH_SECRET_KEY: jwtRefreshSecretKey,
 		},
 		DynamoDBConfig: &db.DynamoDBConfig{
 			DynamoDbUsersTableName:   dbUsersTableName,

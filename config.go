@@ -1,69 +1,124 @@
 package common
 
 import (
+	"errors"
+
 	"github.com/Yulian302/lfusys-services-commons/db"
 	"github.com/Yulian302/lfusys-services-commons/jwt"
-	"github.com/Yulian302/lfusys-services-commons/services"
 )
 
-type Service struct {
-	*services.UploadsConfig
+type ServiceConfig struct {
+	UploadsURL      string
+	UploadsAddr     string
+	GatewayAddr     string
+	SessionGRPCUrl  string
+	SessionGRPCAddr string
 }
 
 type Config struct {
-	HTTPAddr         string
-	GRPCAddr         string
-	SessionsGRPCAddr string
-	Env              string
-	Tracing          bool
-	UploadServiceUrl string
+	Env     string
+	Tracing bool
+
 	*AWSConfig
 	*jwt.JWTConfig
 	*db.DynamoDBConfig
-	*Service
+	*ServiceConfig
+}
+
+func (c *Config) IsProduction() bool {
+	return c.Env == "PROD"
+}
+
+func (c *Config) IsDevelopment() bool {
+	return c.Env == "DEV"
+}
+
+func (c *Config) IsStaging() bool {
+	return c.Env == "STAGING"
+}
+
+func (c *Config) Validate() error {
+
+	err := c.AWSConfig.Validate()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *AWSConfig) Validate() error {
+	err := c.ValidateSecrets()
+	if err != nil {
+		return err
+	}
+
+	if c.Region == "" {
+		return errors.New("AWS_REGION_NAME is required")
+	}
+
+	if c.BucketName == "" {
+		return errors.New("AWS_BUCKET is required")
+	}
+
+	return nil
+}
+
+func (c *AWSConfig) ValidateSecrets() error {
+	if c.AccessKeyID == "" {
+		return errors.New("AWS_ACCESS_KEY_ID is required")
+	}
+	if c.SecretAccessKey == "" {
+		return errors.New("AWS_SECRET_ACCESS_KEY is required")
+	}
+	return nil
 }
 
 func LoadConfig() Config {
-	httpAddr := EnvVar("HTTP_ADDR", ":8080")
-	grpcAddr := EnvVar("GRPC_ADDR", "localhost:50051")
-	sessionsGrpcAddr := EnvVar("SESSIONS_GRPC_ADDR", "localhost:50051")
 	env := EnvVar("ENV", "DEV")
+
+	gatewayAddr := EnvVar("GATEWAY_ADDR", ":8080")
+
+	sessionGrpcAddr := EnvVar("SESSION_GRPC_ADDR", ":50051")
+	sessionGrpcUrl := EnvVar("SESSION_GRPC_URL", "localhost:50051")
+
+	uploadsUrl := EnvVar("UPLOADS_URL", "http://localhost:8081")
+	uploadsAddr := EnvVar("UPLOADS_ADDR", "localhost:8080")
+
+	jwtRefreshSecretKey := EnvVar("JWT_REFRESH_SECRET_KEY", "")
+	jwtSecretKey := EnvVar("JWT_SECRET_KEY", "")
+
 	awsAccessKeyId := EnvVar("AWS_ACCESS_KEY_ID", "")
 	awsSecretAccessKey := EnvVar("AWS_SECRET_ACCESS_KEY", "")
 	awsRegion := EnvVar("AWS_REGION", "eu-north-1")
-	jwtSecretKey := EnvVar("JWT_SECRET_KEY", "")
-	jwtRefreshSecretKey := EnvVar("JWT_REFRESH_SECRET_KEY", "")
-	uploadServiceUrl := EnvVar("UPLOAD_SERVICE_URL", "http://localhost:8081")
-	dbUsersTableName := EnvVar("DYNAMODB_USERS_TABLE_NAME", "users")
-	dbUploadsTableName := EnvVar("DYNAMODB_UPLOADS_TABLE_NAME", "uploads")
-	uploadsConfig := EnvVar("UPLOADS_ADDR", "localhost:8080")
 	awsBucketName := EnvVar("AWS_BUCKET_NAME", "lfusyschunks")
 
+	// Dynamo DB
+	usersTableName := EnvVar("DYNAMODB_USERS_TABLE_NAME", "users")
+	uploadsTableName := EnvVar("DYNAMODB_UPLOADS_TABLE_NAME", "uploads")
+
 	return Config{
-		HTTPAddr:         httpAddr,
-		GRPCAddr:         grpcAddr,
-		SessionsGRPCAddr: sessionsGrpcAddr,
-		Env:              env,
-		Tracing:          env == "DEV",
-		UploadServiceUrl: uploadServiceUrl,
+		Env:     env,
+		Tracing: env == "DEV",
 		AWSConfig: &AWSConfig{
-			AWS_ACCESS_KEY_ID:     awsAccessKeyId,
-			AWS_SECRET_ACCESS_KEY: awsSecretAccessKey,
-			AWS_REGION:            awsRegion,
+			AccessKeyID:     awsAccessKeyId,
+			SecretAccessKey: awsSecretAccessKey,
+			Region:          awsRegion,
+			BucketName:      awsBucketName,
 		},
 		JWTConfig: &jwt.JWTConfig{
-			SECRET_KEY:         jwtSecretKey,
-			REFRESH_SECRET_KEY: jwtRefreshSecretKey,
+			SecretKey:        jwtSecretKey,
+			RefreshSecretKey: jwtRefreshSecretKey,
 		},
 		DynamoDBConfig: &db.DynamoDBConfig{
-			DynamoDbUsersTableName:   dbUsersTableName,
-			DynamoDbUploadsTableName: dbUploadsTableName,
+			UsersTableName:   usersTableName,
+			UploadsTableName: uploadsTableName,
 		},
-		Service: &Service{
-			UploadsConfig: &services.UploadsConfig{
-				UPLOADS_ADDR:    uploadsConfig,
-				AWS_BUCKET_NAME: awsBucketName,
-			},
+		ServiceConfig: &ServiceConfig{
+			UploadsURL:      uploadsUrl,
+			GatewayAddr:     gatewayAddr,
+			UploadsAddr:     uploadsAddr,
+			SessionGRPCUrl:  sessionGrpcUrl,
+			SessionGRPCAddr: sessionGrpcAddr,
 		},
 	}
 }

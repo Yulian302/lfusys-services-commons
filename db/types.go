@@ -1,6 +1,6 @@
 package db
 
 type DynamoDBConfig struct {
-	DynamoDbUsersTableName   string
-	DynamoDbUploadsTableName string
+	UsersTableName   string
+	UploadsTableName string
 }

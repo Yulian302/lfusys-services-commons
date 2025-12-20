@@ -7,8 +7,8 @@ import (
 )
 
 type JWTConfig struct {
-	SECRET_KEY         string
-	REFRESH_SECRET_KEY string
+	SecretKey        string
+	RefreshSecretKey string
 }
 
 type JWTClaims struct {

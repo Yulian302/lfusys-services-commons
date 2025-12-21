@@ -6,6 +6,17 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+const (
+	AccessTokenDuration  = 30 * time.Minute
+	RefreshTokenDuration = 30 * 24 * time.Hour
+	CookiePath           = "/"
+)
+
+type TokenPair struct {
+	AccessToken  string
+	RefreshToken string
+}
+
 type JWTConfig struct {
 	SecretKey        string
 	RefreshSecretKey string

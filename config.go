@@ -8,11 +8,12 @@ import (
 )
 
 type ServiceConfig struct {
-	UploadsURL      string
-	UploadsAddr     string
-	GatewayAddr     string
-	SessionGRPCUrl  string
-	SessionGRPCAddr string
+	UploadsURL                    string
+	UploadsAddr                   string
+	UploadsNotificationsQueueName string
+	GatewayAddr                   string
+	SessionGRPCUrl                string
+	SessionGRPCAddr               string
 }
 
 type Config struct {
@@ -89,12 +90,17 @@ func LoadConfig() Config {
 
 	awsAccessKeyId := EnvVar("AWS_ACCESS_KEY_ID", "")
 	awsSecretAccessKey := EnvVar("AWS_SECRET_ACCESS_KEY", "")
+	awsAccountId := EnvVar("AWS_ACCOUNT_ID", "")
 	awsRegion := EnvVar("AWS_REGION", "eu-north-1")
 	awsBucketName := EnvVar("AWS_BUCKET_NAME", "lfusyschunks")
 
 	// Dynamo DB
 	usersTableName := EnvVar("DYNAMODB_USERS_TABLE_NAME", "users")
 	uploadsTableName := EnvVar("DYNAMODB_UPLOADS_TABLE_NAME", "uploads")
+	filesTableName := EnvVar("DYNAMODB_FILES_TABLE_NAME", "files")
+
+	// notifications queue
+	uploadsNotificationsQueue := EnvVar("UPLOADS_NOTIFICATIONS_QUEUE_NAME", "uploads_notifications")
 
 	return Config{
 		Env:     env,
@@ -102,6 +108,7 @@ func LoadConfig() Config {
 		AWSConfig: &AWSConfig{
 			AccessKeyID:     awsAccessKeyId,
 			SecretAccessKey: awsSecretAccessKey,
+			AccountID:       awsAccountId,
 			Region:          awsRegion,
 			BucketName:      awsBucketName,
 		},
@@ -112,13 +119,15 @@ func LoadConfig() Config {
 		DynamoDBConfig: &db.DynamoDBConfig{
 			UsersTableName:   usersTableName,
 			UploadsTableName: uploadsTableName,
+			FilesTableName:   filesTableName,
 		},
 		ServiceConfig: &ServiceConfig{
-			UploadsURL:      uploadsUrl,
-			GatewayAddr:     gatewayAddr,
-			UploadsAddr:     uploadsAddr,
-			SessionGRPCUrl:  sessionGrpcUrl,
-			SessionGRPCAddr: sessionGrpcAddr,
+			UploadsURL:                    uploadsUrl,
+			GatewayAddr:                   gatewayAddr,
+			UploadsAddr:                   uploadsAddr,
+			SessionGRPCUrl:                sessionGrpcUrl,
+			SessionGRPCAddr:               sessionGrpcAddr,
+			UploadsNotificationsQueueName: uploadsNotificationsQueue,
 		},
 	}
 }

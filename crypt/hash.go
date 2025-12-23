@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 )
 
-func HashPassword(password string) string {
+func HashSHA256(password string) string {
 	hasher := sha256.New()
 	hasher.Write([]byte(password))
 	return hex.EncodeToString(hasher.Sum(nil))
@@ -18,16 +18,16 @@ func generateRandomSalt() string {
 	return hex.EncodeToString(bytes)
 }
 
-func HashPasswordWithSalt(password string) (hash, salt string) {
+func HashSHA256WithSalt(password string) (hash, salt string) {
 	salt = generateRandomSalt()
 	combined := password + salt
-	return HashPassword(combined), salt
+	return HashSHA256(combined), salt
 }
 
 func VerifyPassword(password string, hash string) bool {
-	return HashPassword(password) == hash
+	return HashSHA256(password) == hash
 }
 
 func VerifyPasswordWithSalt(password string, storedHash string, storedSalt string) bool {
-	return HashPassword(password+storedSalt) == storedHash
+	return HashSHA256(password+storedSalt) == storedHash
 }

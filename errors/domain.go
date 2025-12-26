@@ -3,12 +3,13 @@ package errors
 import "errors"
 
 var (
-	ErrUserNotFound      = errors.New("user not found")
-	ErrUserAlreadyExists = errors.New("user already exists")
-	ErrInvalidToken      = errors.New("invalid token")
-	ErrInvalidTokenType  = errors.New("invalid token type")
-	ErrTokenSignature    = errors.New("could not sign token")
-	ErrTokenCreation     = errors.New("could not create token")
+	ErrUserNotFound       = errors.New("user not found")
+	ErrInvalidCredentials = errors.New("invalid credentials")
+	ErrUserAlreadyExists  = errors.New("user already exists")
+	ErrInvalidToken       = errors.New("invalid token")
+	ErrInvalidTokenType   = errors.New("invalid token type")
+	ErrTokenSignature     = errors.New("could not sign token")
+	ErrTokenCreation      = errors.New("could not create token")
 
 	ErrInternalServer = errors.New("internal server error")
 

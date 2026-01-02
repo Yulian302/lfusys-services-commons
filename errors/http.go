@@ -39,6 +39,12 @@ func NewServiceUnavailableError(msg string) HTTPError {
 	return HTTPError{Error: msg, Code: 503}
 }
 
+func NewForbiddenError(msg string) HTTPError {
+	return HTTPError{
+		Error: msg, Code: 403,
+	}
+}
+
 // responses
 
 func JSONErrorResponse(ctx *gin.Context, httpError HTTPError) {
@@ -74,4 +80,8 @@ func ServiceUnavailableResponse(ctx *gin.Context, msg string) {
 
 func NotFoundResponse(ctx *gin.Context, msg string) {
 	JSONErrorResponse(ctx, NewNotFoundError(msg))
+}
+
+func ForbiddenResponse(ctx *gin.Context, msg string) {
+	JSONErrorResponse(ctx, NewForbiddenError(msg))
 }

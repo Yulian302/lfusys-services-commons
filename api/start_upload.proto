@@ -6,16 +6,28 @@ package api;
 // creates a session for file uploading
 service Uploader {
     // initiates a multipart upload session for a file
-    rpc StartUpload (UploadRequest) returns (UploadReply);
+  rpc StartUpload (UploadRequest) returns (UploadReply);
+    // gets current upload status
+  rpc GetUploadStatus (UploadID) returns (StatusReply);
 }
 
 message UploadRequest {
-    string user_email = 1;
-    uint64 file_size = 2;
+  string user_email = 1;
+  uint64 file_size  = 2;
+}
+
+message UploadID {
+  string upload_id = 1;
 }
 
 message UploadReply{
-    string upload_id = 1;
-    uint32 total_chunks = 2;
-    repeated string upload_urls = 3;
+  string          upload_id    = 1;
+  uint32          total_chunks = 2;
+  repeated string upload_urls  = 3;
+}
+
+message StatusReply{
+  string status   = 1;
+  uint32 progress = 2;
+  string message  = 3;
 }

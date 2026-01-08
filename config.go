@@ -76,6 +76,11 @@ func (c *AWSConfig) ValidateSecrets() error {
 
 func LoadConfig() Config {
 	env := EnvVar("ENV", "DEV")
+	tracingRaw := EnvVar("TRACING", "false")
+	var tracing bool
+	if tracingRaw == "true" {
+		tracing = true
+	}
 
 	gatewayAddr := EnvVar("GATEWAY_ADDR", ":8080")
 
@@ -104,7 +109,7 @@ func LoadConfig() Config {
 
 	return Config{
 		Env:     env,
-		Tracing: env == "DEV",
+		Tracing: tracing,
 		AWSConfig: &AWSConfig{
 			AccessKeyID:     awsAccessKeyId,
 			SecretAccessKey: awsSecretAccessKey,

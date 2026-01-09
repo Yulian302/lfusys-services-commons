@@ -7,12 +7,12 @@
 package api
 
 import (
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
-
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -238,11 +238,191 @@ func (x *StatusReply) GetMessage() string {
 	return ""
 }
 
+type UserInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserInfo) Reset() {
+	*x = UserInfo{}
+	mi := &file_api_start_upload_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserInfo) ProtoMessage() {}
+
+func (x *UserInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_api_start_upload_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserInfo.ProtoReflect.Descriptor instead.
+func (*UserInfo) Descriptor() ([]byte, []int) {
+	return file_api_start_upload_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *UserInfo) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+type FilesReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Files         []*File                `protobuf:"bytes,1,rep,name=files,proto3" json:"files,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FilesReply) Reset() {
+	*x = FilesReply{}
+	mi := &file_api_start_upload_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FilesReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FilesReply) ProtoMessage() {}
+
+func (x *FilesReply) ProtoReflect() protoreflect.Message {
+	mi := &file_api_start_upload_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FilesReply.ProtoReflect.Descriptor instead.
+func (*FilesReply) Descriptor() ([]byte, []int) {
+	return file_api_start_upload_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *FilesReply) GetFiles() []*File {
+	if x != nil {
+		return x.Files
+	}
+	return nil
+}
+
+type File struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	UploadId      string                 `protobuf:"bytes,2,opt,name=upload_id,json=uploadId,proto3" json:"upload_id,omitempty"`
+	OwnerEmail    string                 `protobuf:"bytes,3,opt,name=owner_email,json=ownerEmail,proto3" json:"owner_email,omitempty"`
+	Size          uint64                 `protobuf:"varint,4,opt,name=size,proto3" json:"size,omitempty"`
+	TotalChunks   uint32                 `protobuf:"varint,5,opt,name=total_chunks,json=totalChunks,proto3" json:"total_chunks,omitempty"`
+	Checksum      string                 `protobuf:"bytes,6,opt,name=checksum,proto3" json:"checksum,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *File) Reset() {
+	*x = File{}
+	mi := &file_api_start_upload_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *File) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*File) ProtoMessage() {}
+
+func (x *File) ProtoReflect() protoreflect.Message {
+	mi := &file_api_start_upload_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use File.ProtoReflect.Descriptor instead.
+func (*File) Descriptor() ([]byte, []int) {
+	return file_api_start_upload_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *File) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *File) GetUploadId() string {
+	if x != nil {
+		return x.UploadId
+	}
+	return ""
+}
+
+func (x *File) GetOwnerEmail() string {
+	if x != nil {
+		return x.OwnerEmail
+	}
+	return ""
+}
+
+func (x *File) GetSize() uint64 {
+	if x != nil {
+		return x.Size
+	}
+	return 0
+}
+
+func (x *File) GetTotalChunks() uint32 {
+	if x != nil {
+		return x.TotalChunks
+	}
+	return 0
+}
+
+func (x *File) GetChecksum() string {
+	if x != nil {
+		return x.Checksum
+	}
+	return ""
+}
+
+func (x *File) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
 var File_api_start_upload_proto protoreflect.FileDescriptor
 
 const file_api_start_upload_proto_rawDesc = "" +
 	"\n" +
-	"\x16api/start_upload.proto\x12\x03api\"K\n" +
+	"\x16api/start_upload.proto\x12\x03api\x1a\x1fgoogle/protobuf/timestamp.proto\"K\n" +
 	"\rUploadRequest\x12\x1d\n" +
 	"\n" +
 	"user_email\x18\x01 \x01(\tR\tuserEmail\x12\x1b\n" +
@@ -257,10 +437,26 @@ const file_api_start_upload_proto_rawDesc = "" +
 	"\vStatusReply\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\tR\x06status\x12\x1a\n" +
 	"\bprogress\x18\x02 \x01(\rR\bprogress\x12\x18\n" +
-	"\amessage\x18\x03 \x01(\tR\amessage2s\n" +
+	"\amessage\x18\x03 \x01(\tR\amessage\" \n" +
+	"\bUserInfo\x12\x14\n" +
+	"\x05email\x18\x01 \x01(\tR\x05email\"-\n" +
+	"\n" +
+	"FilesReply\x12\x1f\n" +
+	"\x05files\x18\x01 \x03(\v2\t.api.FileR\x05files\"\xe2\x01\n" +
+	"\x04File\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
+	"\tupload_id\x18\x02 \x01(\tR\buploadId\x12\x1f\n" +
+	"\vowner_email\x18\x03 \x01(\tR\n" +
+	"ownerEmail\x12\x12\n" +
+	"\x04size\x18\x04 \x01(\x04R\x04size\x12!\n" +
+	"\ftotal_chunks\x18\x05 \x01(\rR\vtotalChunks\x12\x1a\n" +
+	"\bchecksum\x18\x06 \x01(\tR\bchecksum\x129\n" +
+	"\n" +
+	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt2\x9f\x01\n" +
 	"\bUploader\x123\n" +
 	"\vStartUpload\x12\x12.api.UploadRequest\x1a\x10.api.UploadReply\x122\n" +
-	"\x0fGetUploadStatus\x12\r.api.UploadID\x1a\x10.api.StatusReplyB\aZ\x05./apib\x06proto3"
+	"\x0fGetUploadStatus\x12\r.api.UploadID\x1a\x10.api.StatusReply\x12*\n" +
+	"\bGetFiles\x12\r.api.UserInfo\x1a\x0f.api.FilesReplyB\aZ\x05./apib\x06proto3"
 
 var (
 	file_api_start_upload_proto_rawDescOnce sync.Once
@@ -274,23 +470,31 @@ func file_api_start_upload_proto_rawDescGZIP() []byte {
 	return file_api_start_upload_proto_rawDescData
 }
 
-var file_api_start_upload_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_api_start_upload_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_api_start_upload_proto_goTypes = []any{
-	(*UploadRequest)(nil), // 0: api.UploadRequest
-	(*UploadID)(nil),      // 1: api.UploadID
-	(*UploadReply)(nil),   // 2: api.UploadReply
-	(*StatusReply)(nil),   // 3: api.StatusReply
+	(*UploadRequest)(nil),         // 0: api.UploadRequest
+	(*UploadID)(nil),              // 1: api.UploadID
+	(*UploadReply)(nil),           // 2: api.UploadReply
+	(*StatusReply)(nil),           // 3: api.StatusReply
+	(*UserInfo)(nil),              // 4: api.UserInfo
+	(*FilesReply)(nil),            // 5: api.FilesReply
+	(*File)(nil),                  // 6: api.File
+	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
 }
 var file_api_start_upload_proto_depIdxs = []int32{
-	0, // 0: api.Uploader.StartUpload:input_type -> api.UploadRequest
-	1, // 1: api.Uploader.GetUploadStatus:input_type -> api.UploadID
-	2, // 2: api.Uploader.StartUpload:output_type -> api.UploadReply
-	3, // 3: api.Uploader.GetUploadStatus:output_type -> api.StatusReply
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	6, // 0: api.FilesReply.files:type_name -> api.File
+	7, // 1: api.File.created_at:type_name -> google.protobuf.Timestamp
+	0, // 2: api.Uploader.StartUpload:input_type -> api.UploadRequest
+	1, // 3: api.Uploader.GetUploadStatus:input_type -> api.UploadID
+	4, // 4: api.Uploader.GetFiles:input_type -> api.UserInfo
+	2, // 5: api.Uploader.StartUpload:output_type -> api.UploadReply
+	3, // 6: api.Uploader.GetUploadStatus:output_type -> api.StatusReply
+	5, // 7: api.Uploader.GetFiles:output_type -> api.FilesReply
+	5, // [5:8] is the sub-list for method output_type
+	2, // [2:5] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_api_start_upload_proto_init() }
@@ -304,7 +508,7 @@ func file_api_start_upload_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_start_upload_proto_rawDesc), len(file_api_start_upload_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

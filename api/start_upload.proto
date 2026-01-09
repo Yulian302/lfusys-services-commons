@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 option go_package = "./api";
 package api;
 
@@ -9,6 +11,8 @@ service Uploader {
   rpc StartUpload (UploadRequest) returns (UploadReply);
     // gets current upload status
   rpc GetUploadStatus (UploadID) returns (StatusReply);
+  // gets all user's files
+  rpc GetFiles (UserInfo) returns (FilesReply);
 }
 
 message UploadRequest {
@@ -30,4 +34,22 @@ message StatusReply{
   string status   = 1;
   uint32 progress = 2;
   string message  = 3;
+}
+
+message UserInfo {
+  string email = 1;
+}
+
+message FilesReply {
+  repeated File files = 1;
+}
+
+message File {
+  string                    id           = 1;
+  string                    upload_id    = 2;
+  string                    owner_email  = 3;
+  uint64                    size         = 4;
+  uint32                    total_chunks = 5;
+  string                    checksum     = 6;
+  google.protobuf.Timestamp created_at   = 7;
 }

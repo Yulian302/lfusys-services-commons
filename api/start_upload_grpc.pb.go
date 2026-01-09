@@ -8,7 +8,6 @@ package api
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -22,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	Uploader_StartUpload_FullMethodName     = "/api.Uploader/StartUpload"
 	Uploader_GetUploadStatus_FullMethodName = "/api.Uploader/GetUploadStatus"
+	Uploader_GetFiles_FullMethodName        = "/api.Uploader/GetFiles"
 )
 
 // UploaderClient is the client API for Uploader service.
@@ -32,7 +32,10 @@ const (
 type UploaderClient interface {
 	// initiates a multipart upload session for a file
 	StartUpload(ctx context.Context, in *UploadRequest, opts ...grpc.CallOption) (*UploadReply, error)
+	// gets current upload status
 	GetUploadStatus(ctx context.Context, in *UploadID, opts ...grpc.CallOption) (*StatusReply, error)
+	// gets all user's files
+	GetFiles(ctx context.Context, in *UserInfo, opts ...grpc.CallOption) (*FilesReply, error)
 }
 
 type uploaderClient struct {
@@ -63,6 +66,16 @@ func (c *uploaderClient) GetUploadStatus(ctx context.Context, in *UploadID, opts
 	return out, nil
 }
 
+func (c *uploaderClient) GetFiles(ctx context.Context, in *UserInfo, opts ...grpc.CallOption) (*FilesReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FilesReply)
+	err := c.cc.Invoke(ctx, Uploader_GetFiles_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UploaderServer is the server API for Uploader service.
 // All implementations must embed UnimplementedUploaderServer
 // for forward compatibility.
@@ -71,7 +84,10 @@ func (c *uploaderClient) GetUploadStatus(ctx context.Context, in *UploadID, opts
 type UploaderServer interface {
 	// initiates a multipart upload session for a file
 	StartUpload(context.Context, *UploadRequest) (*UploadReply, error)
+	// gets current upload status
 	GetUploadStatus(context.Context, *UploadID) (*StatusReply, error)
+	// gets all user's files
+	GetFiles(context.Context, *UserInfo) (*FilesReply, error)
 	mustEmbedUnimplementedUploaderServer()
 }
 
@@ -87,6 +103,9 @@ func (UnimplementedUploaderServer) StartUpload(context.Context, *UploadRequest) 
 }
 func (UnimplementedUploaderServer) GetUploadStatus(context.Context, *UploadID) (*StatusReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUploadStatus not implemented")
+}
+func (UnimplementedUploaderServer) GetFiles(context.Context, *UserInfo) (*FilesReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetFiles not implemented")
 }
 func (UnimplementedUploaderServer) mustEmbedUnimplementedUploaderServer() {}
 func (UnimplementedUploaderServer) testEmbeddedByValue()                  {}
@@ -145,6 +164,24 @@ func _Uploader_GetUploadStatus_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Uploader_GetFiles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UploaderServer).GetFiles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Uploader_GetFiles_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UploaderServer).GetFiles(ctx, req.(*UserInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Uploader_ServiceDesc is the grpc.ServiceDesc for Uploader service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -159,6 +196,10 @@ var Uploader_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUploadStatus",
 			Handler:    _Uploader_GetUploadStatus_Handler,
+		},
+		{
+			MethodName: "GetFiles",
+			Handler:    _Uploader_GetFiles_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

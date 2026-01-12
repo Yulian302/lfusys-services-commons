@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/Yulian302/lfusys-services-commons/db"
+	"github.com/Yulian302/lfusys-services-commons/github"
 	"github.com/Yulian302/lfusys-services-commons/jwt"
 )
 
@@ -22,7 +23,9 @@ type Config struct {
 
 	*AWSConfig
 	*jwt.JWTConfig
+	*github.GithubConfig
 	*db.DynamoDBConfig
+	*RedisConfig
 	*ServiceConfig
 }
 
@@ -82,6 +85,8 @@ func LoadConfig() Config {
 		tracing = true
 	}
 
+	frontendURL := EnvVar("FRONTEND_URL", "http://localhost:3000")
+
 	gatewayAddr := EnvVar("GATEWAY_ADDR", ":8080")
 
 	sessionGrpcAddr := EnvVar("SESSION_GRPC_ADDR", ":50051")
@@ -93,6 +98,11 @@ func LoadConfig() Config {
 	jwtRefreshSecretKey := EnvVar("JWT_REFRESH_SECRET_KEY", "")
 	jwtSecretKey := EnvVar("JWT_SECRET_KEY", "")
 
+	ghClientID := EnvVar("OAUTH2_GITHUB_CLIENT_ID", "")
+	ghClientSecret := EnvVar("OAUTH2_GITHUB_CLIENT_SECRET", "")
+	ghRedirectUri := EnvVar("OAUTH2_GITHUB_REDIRECT_URI", "")
+	ghExchangeUrl := EnvVar("OAUTH2_GITHUB_EXCHANGE_URL", "")
+
 	awsAccessKeyId := EnvVar("AWS_ACCESS_KEY_ID", "")
 	awsSecretAccessKey := EnvVar("AWS_SECRET_ACCESS_KEY", "")
 	awsAccountId := EnvVar("AWS_ACCOUNT_ID", "")
@@ -103,6 +113,8 @@ func LoadConfig() Config {
 	usersTableName := EnvVar("DYNAMODB_USERS_TABLE_NAME", "users")
 	uploadsTableName := EnvVar("DYNAMODB_UPLOADS_TABLE_NAME", "uploads")
 	filesTableName := EnvVar("DYNAMODB_FILES_TABLE_NAME", "files")
+
+	redisHost := EnvVar("REDIS_HOST", "redis:6379")
 
 	// notifications queue
 	uploadsNotificationsQueue := EnvVar("UPLOADS_NOTIFICATIONS_QUEUE_NAME", "uploads_notifications")
@@ -121,10 +133,20 @@ func LoadConfig() Config {
 			SecretKey:        jwtSecretKey,
 			RefreshSecretKey: jwtRefreshSecretKey,
 		},
+		GithubConfig: &github.GithubConfig{
+			ClientID:     ghClientID,
+			ClientSecret: ghClientSecret,
+			RedirectURI:  ghRedirectUri,
+			ExchangeURL:  ghExchangeUrl,
+			FrontendURL:  frontendURL,
+		},
 		DynamoDBConfig: &db.DynamoDBConfig{
 			UsersTableName:   usersTableName,
 			UploadsTableName: uploadsTableName,
 			FilesTableName:   filesTableName,
+		},
+		RedisConfig: &RedisConfig{
+			HOST: redisHost,
 		},
 		ServiceConfig: &ServiceConfig{
 			UploadsURL:                    uploadsUrl,

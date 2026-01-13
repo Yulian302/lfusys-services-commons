@@ -4,8 +4,10 @@ import (
 	"errors"
 
 	"github.com/Yulian302/lfusys-services-commons/db"
-	"github.com/Yulian302/lfusys-services-commons/github"
 	"github.com/Yulian302/lfusys-services-commons/jwt"
+	"github.com/Yulian302/lfusys-services-commons/oauth"
+	"github.com/Yulian302/lfusys-services-commons/oauth/github"
+	"github.com/Yulian302/lfusys-services-commons/oauth/google"
 )
 
 type ServiceConfig struct {
@@ -23,7 +25,7 @@ type Config struct {
 
 	*AWSConfig
 	*jwt.JWTConfig
-	*github.GithubConfig
+	*oauth.OAuthConfig
 	*db.DynamoDBConfig
 	*RedisConfig
 	*ServiceConfig
@@ -103,6 +105,11 @@ func LoadConfig() Config {
 	ghRedirectUri := EnvVar("OAUTH2_GITHUB_REDIRECT_URI", "")
 	ghExchangeUrl := EnvVar("OAUTH2_GITHUB_EXCHANGE_URL", "")
 
+	googleClientID := EnvVar("OAUTH2_GOOGLE_CLIENT_ID", "")
+	googleClientSecret := EnvVar("OAUTH2_GOOGLE_CLIENT_SECRET", "")
+	googleRedirectUri := EnvVar("OAUTH2_GOOGLE_REDIRECT_URI", "")
+	googleExchangeUrl := EnvVar("OAUTH2_GOOGLE_EXCHANGE_URL", "")
+
 	awsAccessKeyId := EnvVar("AWS_ACCESS_KEY_ID", "")
 	awsSecretAccessKey := EnvVar("AWS_SECRET_ACCESS_KEY", "")
 	awsAccountId := EnvVar("AWS_ACCOUNT_ID", "")
@@ -133,12 +140,21 @@ func LoadConfig() Config {
 			SecretKey:        jwtSecretKey,
 			RefreshSecretKey: jwtRefreshSecretKey,
 		},
-		GithubConfig: &github.GithubConfig{
-			ClientID:     ghClientID,
-			ClientSecret: ghClientSecret,
-			RedirectURI:  ghRedirectUri,
-			ExchangeURL:  ghExchangeUrl,
-			FrontendURL:  frontendURL,
+		OAuthConfig: &oauth.OAuthConfig{
+			GithubConfig: &github.GithubConfig{
+				ClientID:     ghClientID,
+				ClientSecret: ghClientSecret,
+				RedirectURI:  ghRedirectUri,
+				ExchangeURL:  ghExchangeUrl,
+				FrontendURL:  frontendURL,
+			},
+			GoogleConfig: &google.GoogleConfig{
+				ClientID:     googleClientID,
+				ClientSecret: googleClientSecret,
+				RedirectURI:  googleRedirectUri,
+				ExchangeURL:  googleExchangeUrl,
+				FrontendURL:  frontendURL,
+			},
 		},
 		DynamoDBConfig: &db.DynamoDBConfig{
 			UsersTableName:   usersTableName,

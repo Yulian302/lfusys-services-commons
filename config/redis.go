@@ -1,4 +1,4 @@
-package common
+package config
 
 import "errors"
 
@@ -6,8 +6,8 @@ type RedisConfig struct {
 	HOST string
 }
 
-func (cfg *RedisConfig) ValidateSecrets() error {
-	if cfg.HOST == "" {
+func (c *RedisConfig) ValidateSecrets() error {
+	if c.HOST == "" {
 		return errors.New("REDIS_HOST is required")
 	}
 	return nil

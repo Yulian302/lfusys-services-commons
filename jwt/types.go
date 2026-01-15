@@ -17,11 +17,6 @@ type TokenPair struct {
 	RefreshToken string
 }
 
-type JWTConfig struct {
-	SecretKey        string
-	RefreshSecretKey string
-}
-
 type JWTClaims struct {
 	Issuer    string `json:"iss"`
 	Subject   string `json:"subject"`

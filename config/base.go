@@ -1,32 +1,20 @@
-package common
+package config
 
 import (
-	"errors"
-
-	"github.com/Yulian302/lfusys-services-commons/db"
-	"github.com/Yulian302/lfusys-services-commons/jwt"
-	"github.com/Yulian302/lfusys-services-commons/oauth"
-	"github.com/Yulian302/lfusys-services-commons/oauth/github"
-	"github.com/Yulian302/lfusys-services-commons/oauth/google"
+	"fmt"
 )
 
-type ServiceConfig struct {
-	UploadsURL                    string
-	UploadsAddr                   string
-	UploadsNotificationsQueueName string
-	GatewayAddr                   string
-	SessionGRPCUrl                string
-	SessionGRPCAddr               string
-}
-
 type Config struct {
-	Env     string
-	Tracing bool
+	Env         string
+	Tracing     bool
+	FrontendURL string
+
+	*CorsConfig
 
 	*AWSConfig
-	*jwt.JWTConfig
-	*oauth.OAuthConfig
-	*db.DynamoDBConfig
+	*JWTConfig
+	*OAuthConfig
+	*DynamoDBConfig
 	*RedisConfig
 	*ServiceConfig
 }
@@ -52,33 +40,6 @@ func (c *Config) Validate() error {
 	return nil
 }
 
-func (c *AWSConfig) Validate() error {
-	err := c.ValidateSecrets()
-	if err != nil {
-		return err
-	}
-
-	if c.Region == "" {
-		return errors.New("AWS_REGION_NAME is required")
-	}
-
-	if c.BucketName == "" {
-		return errors.New("AWS_BUCKET is required")
-	}
-
-	return nil
-}
-
-func (c *AWSConfig) ValidateSecrets() error {
-	if c.AccessKeyID == "" {
-		return errors.New("AWS_ACCESS_KEY_ID is required")
-	}
-	if c.SecretAccessKey == "" {
-		return errors.New("AWS_SECRET_ACCESS_KEY is required")
-	}
-	return nil
-}
-
 func LoadConfig() Config {
 	env := EnvVar("ENV", "DEV")
 	tracingRaw := EnvVar("TRACING", "false")
@@ -88,6 +49,9 @@ func LoadConfig() Config {
 	}
 
 	frontendURL := EnvVar("FRONTEND_URL", "http://localhost:3000")
+
+	// cors
+	allowedOrigins := EnvVar("CORS_ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000")
 
 	gatewayAddr := EnvVar("GATEWAY_ADDR", ":8080")
 
@@ -127,8 +91,12 @@ func LoadConfig() Config {
 	uploadsNotificationsQueue := EnvVar("UPLOADS_NOTIFICATIONS_QUEUE_NAME", "uploads_notifications")
 
 	return Config{
-		Env:     env,
-		Tracing: tracing,
+		Env:         env,
+		Tracing:     tracing,
+		FrontendURL: frontendURL,
+		CorsConfig: &CorsConfig{
+			Origins: allowedOrigins,
+		},
 		AWSConfig: &AWSConfig{
 			AccessKeyID:     awsAccessKeyId,
 			SecretAccessKey: awsSecretAccessKey,
@@ -136,27 +104,25 @@ func LoadConfig() Config {
 			Region:          awsRegion,
 			BucketName:      awsBucketName,
 		},
-		JWTConfig: &jwt.JWTConfig{
+		JWTConfig: &JWTConfig{
 			SecretKey:        jwtSecretKey,
 			RefreshSecretKey: jwtRefreshSecretKey,
 		},
-		OAuthConfig: &oauth.OAuthConfig{
-			GithubConfig: &github.GithubConfig{
+		OAuthConfig: &OAuthConfig{
+			GithubConfig: &GithubConfig{
 				ClientID:     ghClientID,
 				ClientSecret: ghClientSecret,
 				RedirectURI:  ghRedirectUri,
 				ExchangeURL:  ghExchangeUrl,
-				FrontendURL:  frontendURL,
 			},
-			GoogleConfig: &google.GoogleConfig{
+			GoogleConfig: &GoogleConfig{
 				ClientID:     googleClientID,
 				ClientSecret: googleClientSecret,
 				RedirectURI:  googleRedirectUri,
 				ExchangeURL:  googleExchangeUrl,
-				FrontendURL:  frontendURL,
 			},
 		},
-		DynamoDBConfig: &db.DynamoDBConfig{
+		DynamoDBConfig: &DynamoDBConfig{
 			UsersTableName:   usersTableName,
 			UploadsTableName: uploadsTableName,
 			FilesTableName:   filesTableName,
@@ -173,4 +139,44 @@ func LoadConfig() Config {
 			UploadsNotificationsQueueName: uploadsNotificationsQueue,
 		},
 	}
+}
+
+func (c *Config) ValidateAllSecrets() error {
+	if c.Env == "" {
+		return fmt.Errorf("ENV is required")
+	}
+
+	if err := c.CorsConfig.Validate(); err != nil {
+		return fmt.Errorf("CORS was not configured: %s", err.Error())
+	}
+
+	if err := c.AWSConfig.Validate(); err != nil {
+		return fmt.Errorf("AWS was not configured: %s", err.Error())
+	}
+
+	if err := c.JWTConfig.ValidateSecrets(); err != nil {
+		return fmt.Errorf("JWT was not configured: %s", err.Error())
+	}
+
+	if err := c.OAuthConfig.GithubConfig.ValidateSecrets(); err != nil {
+		return fmt.Errorf("GITHUB OAUTH was not configured: %s", err.Error())
+	}
+
+	if err := c.OAuthConfig.GoogleConfig.ValidateSecrets(); err != nil {
+		return fmt.Errorf("GOOGLE OAUTH was not configured: %s", err.Error())
+	}
+
+	if err := c.DynamoDBConfig.Validate(); err != nil {
+		return fmt.Errorf("DYNAMODB was not configured: %s", err.Error())
+	}
+
+	if err := c.RedisConfig.ValidateSecrets(); err != nil {
+		return fmt.Errorf("REDIS was not configured: %s", err.Error())
+	}
+
+	if err := c.ServiceConfig.Validate(); err != nil {
+		return fmt.Errorf("SERVICES were not configured: %s", err.Error())
+	}
+
+	return nil
 }

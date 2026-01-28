@@ -35,6 +35,14 @@ func (m *MockDynamoDbStore) FindExisting(
 	return args.Bool(0), args.Error(1)
 }
 
+func (m *MockDynamoDbStore) IsReady() bool {
+	return true
+}
+
+func (m *MockDynamoDbStore) Name() string {
+	return "Mock"
+}
+
 func (m *MockDynamoDbStore) ResetMock() {
 	m.ExpectedCalls = nil
 	m.Calls = nil

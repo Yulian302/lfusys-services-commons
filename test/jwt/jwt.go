@@ -17,6 +17,7 @@ func MakeTestJWT(t *testing.T, secretKey string, email string) string {
 		Subject:   email,
 		IssuedAt:  time.Now().Unix(),
 		ExpiresAt: time.Now().Add(time.Hour).Unix(),
+		Type:      "access",
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

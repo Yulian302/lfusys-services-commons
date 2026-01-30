@@ -22,8 +22,10 @@ func (h *HealthHandler) Live(c *gin.Context) {
 }
 
 func (h *HealthHandler) Ready(c *gin.Context) {
+	ctx := c.Request.Context()
+
 	for _, check := range h.checks {
-		if !check.IsReady() {
+		if err := check.IsReady(ctx); err != nil {
 			errors.ServiceUnavailableResponse(c, fmt.Sprintf("service %s is not ready", check.Name()))
 			return
 		}

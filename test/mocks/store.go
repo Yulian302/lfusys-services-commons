@@ -35,8 +35,8 @@ func (m *MockDynamoDbStore) FindExisting(
 	return args.Bool(0), args.Error(1)
 }
 
-func (m *MockDynamoDbStore) IsReady() bool {
-	return true
+func (m *MockDynamoDbStore) IsReady(ctx context.Context) error {
+	return nil
 }
 
 func (m *MockDynamoDbStore) Name() string {

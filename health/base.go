@@ -1,6 +1,8 @@
 package health
 
+import "context"
+
 type ReadinessCheck interface {
 	Name() string
-	IsReady() bool
+	IsReady(ctx context.Context) error
 }

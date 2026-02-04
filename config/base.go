@@ -7,6 +7,7 @@ import (
 type Config struct {
 	Env         string
 	Tracing     bool
+	TracingAddr string
 	FrontendURL string
 
 	*CorsConfig
@@ -47,6 +48,7 @@ func LoadConfig() Config {
 	if tracingRaw == "true" {
 		tracing = true
 	}
+	tracingAddr := EnvVar("TRACING_ADDR", "jaeger:4317")
 
 	frontendURL := EnvVar("FRONTEND_URL", "http://localhost:3000")
 
@@ -93,6 +95,7 @@ func LoadConfig() Config {
 	return Config{
 		Env:         env,
 		Tracing:     tracing,
+		TracingAddr: tracingAddr,
 		FrontendURL: frontendURL,
 		CorsConfig: &CorsConfig{
 			Origins: allowedOrigins,

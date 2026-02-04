@@ -3,58 +3,47 @@ package common
 import (
 	"context"
 	"fmt"
-	"log"
-	"time"
 
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
-	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
-	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	semconv "go.opentelemetry.io/otel/semconv/v1.37.0"
 )
 
 var (
 	tracer = otel.Tracer("github.com/Yulian302/lfusys") // creating a tracer
 )
 
-func StartTracing() (*trace.TracerProvider, error) {
-	headers := map[string]string{
-		"content-type": "application/json",
-	}
-
-	exporter, err := otlptrace.New(
-		context.Background(),
-		otlptracehttp.NewClient(
-			otlptracehttp.WithEndpoint("localhost:4318"),
-			otlptracehttp.WithHeaders(headers),
-			otlptracehttp.WithInsecure(),
-		),
+func InitTracer(ctx context.Context, serviceName, tracingAddr string) (*trace.TracerProvider, error) {
+	exporter, err := otlptracegrpc.New(
+		ctx,
+		otlptracegrpc.WithEndpoint(tracingAddr),
+		otlptracegrpc.WithInsecure(),
 	)
 	if err != nil {
-		return nil, fmt.Errorf("creating new exporter: %w", err)
+		return nil, fmt.Errorf("could not create a new exporter: %v", err)
 	}
 
-	tracerprovider := trace.NewTracerProvider(
-		trace.WithBatcher(
-			exporter,
-			trace.WithMaxExportBatchSize(trace.DefaultMaxExportBatchSize),
-			trace.WithBatchTimeout(trace.DefaultScheduleDelay*time.Millisecond),
-			trace.WithMaxExportBatchSize(trace.DefaultMaxExportBatchSize),
-		),
-		trace.WithResource(
-			resource.NewWithAttributes(
-				semconv.SchemaURL,
-				semconv.ServiceNameKey.String("product-app"),
-			),
-		),
+	tp := sdktrace.NewTracerProvider(
+		sdktrace.WithBatcher(exporter),
+		sdktrace.WithResource(resource.NewWithAttributes(
+			semconv.SchemaURL,
+			semconv.ServiceName(serviceName),
+		)),
 	)
 
-	otel.SetTracerProvider(tracerprovider)
+	otel.SetTracerProvider(tp)
 
-	log.Printf("Tracing in progress...")
-
-	return tracerprovider, nil
+	otel.SetTextMapPropagator(
+		propagation.NewCompositeTextMapPropagator(
+			propagation.TraceContext{},
+			propagation.Baggage{},
+		),
+	)
+	return tp, nil
 }
 
 func StartSpan(ctx context.Context, name string) (context.Context, func()) {

@@ -22,6 +22,7 @@ require (
 )
 
 require (
+	github.com/aws/smithy-go v1.24.0
 	github.com/bytedance/sonic v1.14.0 // indirect
 	github.com/bytedance/sonic/loader v0.3.0 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect

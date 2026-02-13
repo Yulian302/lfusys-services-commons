@@ -6,6 +6,13 @@ import (
 	"time"
 )
 
+const (
+	DefaultAttempts  = 3
+	DefaultBaseDelay = 100 * time.Millisecond
+	HealthAttempts   = 3
+	HealthBaseDelay  = 50 * time.Millisecond
+)
+
 // full jitter (AWS style): random in [0, exp)
 func calculateDelayWithJitter(delay time.Duration, attempt int) time.Duration {
 	exp := delay * time.Duration(1<<attempt)

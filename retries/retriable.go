@@ -64,3 +64,43 @@ func IsRetriableDbError(err error) bool {
 	// network/transport errors (timeouts, EOF, etc)
 	return true
 }
+
+func IsRetriableS3Error(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	if IsContextError(err) {
+		return false
+	}
+
+	var apiErr smithy.APIError
+	if errors.As(err, &apiErr) {
+		switch apiErr.ErrorCode() {
+
+		// throttling
+		case "SlowDown",
+			"RequestTimeout":
+
+			return true
+
+		// server faults
+		case "InternalError",
+			"ServiceUnavailable":
+
+			return true
+
+		// permanent client errors
+		case "NoSuchBucket",
+			"NoSuchKey",
+			"AccessDenied",
+			"InvalidObjectState",
+			"InvalidRequest",
+			"PreconditionFailed":
+
+			return false
+		}
+	}
+
+	return true
+}

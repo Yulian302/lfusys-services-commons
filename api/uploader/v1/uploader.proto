@@ -2,8 +2,8 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "./api";
-package api;
+option go_package = "github.com/Yulian302/lfusys-services-commons/api/uploader/v1;upoaderv1";
+package uploader.v1;
 
 // creates a session for file uploading
 service Uploader {
@@ -53,3 +53,4 @@ message File {
   string                    checksum     = 6;
   google.protobuf.Timestamp created_at   = 7;
 }
+

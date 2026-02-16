@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.0
 // - protoc             v3.21.12
-// source: api/start_upload.proto
+// source: api/uploader/v1/uploader.proto
 
-package api
+package upoaderv1
 
 import (
 	context "context"
@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Uploader_StartUpload_FullMethodName     = "/api.Uploader/StartUpload"
-	Uploader_GetUploadStatus_FullMethodName = "/api.Uploader/GetUploadStatus"
-	Uploader_GetFiles_FullMethodName        = "/api.Uploader/GetFiles"
+	Uploader_StartUpload_FullMethodName     = "/uploader.v1.Uploader/StartUpload"
+	Uploader_GetUploadStatus_FullMethodName = "/uploader.v1.Uploader/GetUploadStatus"
+	Uploader_GetFiles_FullMethodName        = "/uploader.v1.Uploader/GetFiles"
 )
 
 // UploaderClient is the client API for Uploader service.
@@ -186,7 +186,7 @@ func _Uploader_GetFiles_Handler(srv interface{}, ctx context.Context, dec func(i
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Uploader_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.Uploader",
+	ServiceName: "uploader.v1.Uploader",
 	HandlerType: (*UploaderServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -203,5 +203,5 @@ var Uploader_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/start_upload.proto",
+	Metadata: "api/uploader/v1/uploader.proto",
 }

@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v3.21.12
-// source: api/start_upload.proto
+// source: api/uploader/v1/uploader.proto
 
-package api
+package upoaderv1
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -32,7 +32,7 @@ type UploadRequest struct {
 
 func (x *UploadRequest) Reset() {
 	*x = UploadRequest{}
-	mi := &file_api_start_upload_proto_msgTypes[0]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +44,7 @@ func (x *UploadRequest) String() string {
 func (*UploadRequest) ProtoMessage() {}
 
 func (x *UploadRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_start_upload_proto_msgTypes[0]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +57,7 @@ func (x *UploadRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadRequest.ProtoReflect.Descriptor instead.
 func (*UploadRequest) Descriptor() ([]byte, []int) {
-	return file_api_start_upload_proto_rawDescGZIP(), []int{0}
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *UploadRequest) GetUserEmail() string {
@@ -83,7 +83,7 @@ type UploadID struct {
 
 func (x *UploadID) Reset() {
 	*x = UploadID{}
-	mi := &file_api_start_upload_proto_msgTypes[1]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -95,7 +95,7 @@ func (x *UploadID) String() string {
 func (*UploadID) ProtoMessage() {}
 
 func (x *UploadID) ProtoReflect() protoreflect.Message {
-	mi := &file_api_start_upload_proto_msgTypes[1]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -108,7 +108,7 @@ func (x *UploadID) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadID.ProtoReflect.Descriptor instead.
 func (*UploadID) Descriptor() ([]byte, []int) {
-	return file_api_start_upload_proto_rawDescGZIP(), []int{1}
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *UploadID) GetUploadId() string {
@@ -129,7 +129,7 @@ type UploadReply struct {
 
 func (x *UploadReply) Reset() {
 	*x = UploadReply{}
-	mi := &file_api_start_upload_proto_msgTypes[2]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -141,7 +141,7 @@ func (x *UploadReply) String() string {
 func (*UploadReply) ProtoMessage() {}
 
 func (x *UploadReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_start_upload_proto_msgTypes[2]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -154,7 +154,7 @@ func (x *UploadReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadReply.ProtoReflect.Descriptor instead.
 func (*UploadReply) Descriptor() ([]byte, []int) {
-	return file_api_start_upload_proto_rawDescGZIP(), []int{2}
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *UploadReply) GetUploadId() string {
@@ -189,7 +189,7 @@ type StatusReply struct {
 
 func (x *StatusReply) Reset() {
 	*x = StatusReply{}
-	mi := &file_api_start_upload_proto_msgTypes[3]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -201,7 +201,7 @@ func (x *StatusReply) String() string {
 func (*StatusReply) ProtoMessage() {}
 
 func (x *StatusReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_start_upload_proto_msgTypes[3]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -214,7 +214,7 @@ func (x *StatusReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StatusReply.ProtoReflect.Descriptor instead.
 func (*StatusReply) Descriptor() ([]byte, []int) {
-	return file_api_start_upload_proto_rawDescGZIP(), []int{3}
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *StatusReply) GetStatus() string {
@@ -247,7 +247,7 @@ type UserInfo struct {
 
 func (x *UserInfo) Reset() {
 	*x = UserInfo{}
-	mi := &file_api_start_upload_proto_msgTypes[4]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -259,7 +259,7 @@ func (x *UserInfo) String() string {
 func (*UserInfo) ProtoMessage() {}
 
 func (x *UserInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_api_start_upload_proto_msgTypes[4]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -272,7 +272,7 @@ func (x *UserInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserInfo.ProtoReflect.Descriptor instead.
 func (*UserInfo) Descriptor() ([]byte, []int) {
-	return file_api_start_upload_proto_rawDescGZIP(), []int{4}
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *UserInfo) GetEmail() string {
@@ -291,7 +291,7 @@ type FilesReply struct {
 
 func (x *FilesReply) Reset() {
 	*x = FilesReply{}
-	mi := &file_api_start_upload_proto_msgTypes[5]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -303,7 +303,7 @@ func (x *FilesReply) String() string {
 func (*FilesReply) ProtoMessage() {}
 
 func (x *FilesReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_start_upload_proto_msgTypes[5]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -316,7 +316,7 @@ func (x *FilesReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FilesReply.ProtoReflect.Descriptor instead.
 func (*FilesReply) Descriptor() ([]byte, []int) {
-	return file_api_start_upload_proto_rawDescGZIP(), []int{5}
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *FilesReply) GetFiles() []*File {
@@ -341,7 +341,7 @@ type File struct {
 
 func (x *File) Reset() {
 	*x = File{}
-	mi := &file_api_start_upload_proto_msgTypes[6]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -353,7 +353,7 @@ func (x *File) String() string {
 func (*File) ProtoMessage() {}
 
 func (x *File) ProtoReflect() protoreflect.Message {
-	mi := &file_api_start_upload_proto_msgTypes[6]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -366,7 +366,7 @@ func (x *File) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use File.ProtoReflect.Descriptor instead.
 func (*File) Descriptor() ([]byte, []int) {
-	return file_api_start_upload_proto_rawDescGZIP(), []int{6}
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *File) GetId() string {
@@ -418,11 +418,11 @@ func (x *File) GetCreatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-var File_api_start_upload_proto protoreflect.FileDescriptor
+var File_api_uploader_v1_uploader_proto protoreflect.FileDescriptor
 
-const file_api_start_upload_proto_rawDesc = "" +
+const file_api_uploader_v1_uploader_proto_rawDesc = "" +
 	"\n" +
-	"\x16api/start_upload.proto\x12\x03api\x1a\x1fgoogle/protobuf/timestamp.proto\"K\n" +
+	"\x1eapi/uploader/v1/uploader.proto\x12\vuploader.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"K\n" +
 	"\rUploadRequest\x12\x1d\n" +
 	"\n" +
 	"user_email\x18\x01 \x01(\tR\tuserEmail\x12\x1b\n" +
@@ -439,10 +439,10 @@ const file_api_start_upload_proto_rawDesc = "" +
 	"\bprogress\x18\x02 \x01(\rR\bprogress\x12\x18\n" +
 	"\amessage\x18\x03 \x01(\tR\amessage\" \n" +
 	"\bUserInfo\x12\x14\n" +
-	"\x05email\x18\x01 \x01(\tR\x05email\"-\n" +
+	"\x05email\x18\x01 \x01(\tR\x05email\"5\n" +
 	"\n" +
-	"FilesReply\x12\x1f\n" +
-	"\x05files\x18\x01 \x03(\v2\t.api.FileR\x05files\"\xe2\x01\n" +
+	"FilesReply\x12'\n" +
+	"\x05files\x18\x01 \x03(\v2\x11.uploader.v1.FileR\x05files\"\xe2\x01\n" +
 	"\x04File\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
 	"\tupload_id\x18\x02 \x01(\tR\buploadId\x12\x1f\n" +
@@ -452,44 +452,44 @@ const file_api_start_upload_proto_rawDesc = "" +
 	"\ftotal_chunks\x18\x05 \x01(\rR\vtotalChunks\x12\x1a\n" +
 	"\bchecksum\x18\x06 \x01(\tR\bchecksum\x129\n" +
 	"\n" +
-	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt2\x9f\x01\n" +
-	"\bUploader\x123\n" +
-	"\vStartUpload\x12\x12.api.UploadRequest\x1a\x10.api.UploadReply\x122\n" +
-	"\x0fGetUploadStatus\x12\r.api.UploadID\x1a\x10.api.StatusReply\x12*\n" +
-	"\bGetFiles\x12\r.api.UserInfo\x1a\x0f.api.FilesReplyB\aZ\x05./apib\x06proto3"
+	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt2\xcf\x01\n" +
+	"\bUploader\x12C\n" +
+	"\vStartUpload\x12\x1a.uploader.v1.UploadRequest\x1a\x18.uploader.v1.UploadReply\x12B\n" +
+	"\x0fGetUploadStatus\x12\x15.uploader.v1.UploadID\x1a\x18.uploader.v1.StatusReply\x12:\n" +
+	"\bGetFiles\x12\x15.uploader.v1.UserInfo\x1a\x17.uploader.v1.FilesReplyBHZFgithub.com/Yulian302/lfusys-services-commons/api/uploader/v1;upoaderv1b\x06proto3"
 
 var (
-	file_api_start_upload_proto_rawDescOnce sync.Once
-	file_api_start_upload_proto_rawDescData []byte
+	file_api_uploader_v1_uploader_proto_rawDescOnce sync.Once
+	file_api_uploader_v1_uploader_proto_rawDescData []byte
 )
 
-func file_api_start_upload_proto_rawDescGZIP() []byte {
-	file_api_start_upload_proto_rawDescOnce.Do(func() {
-		file_api_start_upload_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_start_upload_proto_rawDesc), len(file_api_start_upload_proto_rawDesc)))
+func file_api_uploader_v1_uploader_proto_rawDescGZIP() []byte {
+	file_api_uploader_v1_uploader_proto_rawDescOnce.Do(func() {
+		file_api_uploader_v1_uploader_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_uploader_v1_uploader_proto_rawDesc), len(file_api_uploader_v1_uploader_proto_rawDesc)))
 	})
-	return file_api_start_upload_proto_rawDescData
+	return file_api_uploader_v1_uploader_proto_rawDescData
 }
 
-var file_api_start_upload_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
-var file_api_start_upload_proto_goTypes = []any{
-	(*UploadRequest)(nil),         // 0: api.UploadRequest
-	(*UploadID)(nil),              // 1: api.UploadID
-	(*UploadReply)(nil),           // 2: api.UploadReply
-	(*StatusReply)(nil),           // 3: api.StatusReply
-	(*UserInfo)(nil),              // 4: api.UserInfo
-	(*FilesReply)(nil),            // 5: api.FilesReply
-	(*File)(nil),                  // 6: api.File
+var file_api_uploader_v1_uploader_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_api_uploader_v1_uploader_proto_goTypes = []any{
+	(*UploadRequest)(nil),         // 0: uploader.v1.UploadRequest
+	(*UploadID)(nil),              // 1: uploader.v1.UploadID
+	(*UploadReply)(nil),           // 2: uploader.v1.UploadReply
+	(*StatusReply)(nil),           // 3: uploader.v1.StatusReply
+	(*UserInfo)(nil),              // 4: uploader.v1.UserInfo
+	(*FilesReply)(nil),            // 5: uploader.v1.FilesReply
+	(*File)(nil),                  // 6: uploader.v1.File
 	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
 }
-var file_api_start_upload_proto_depIdxs = []int32{
-	6, // 0: api.FilesReply.files:type_name -> api.File
-	7, // 1: api.File.created_at:type_name -> google.protobuf.Timestamp
-	0, // 2: api.Uploader.StartUpload:input_type -> api.UploadRequest
-	1, // 3: api.Uploader.GetUploadStatus:input_type -> api.UploadID
-	4, // 4: api.Uploader.GetFiles:input_type -> api.UserInfo
-	2, // 5: api.Uploader.StartUpload:output_type -> api.UploadReply
-	3, // 6: api.Uploader.GetUploadStatus:output_type -> api.StatusReply
-	5, // 7: api.Uploader.GetFiles:output_type -> api.FilesReply
+var file_api_uploader_v1_uploader_proto_depIdxs = []int32{
+	6, // 0: uploader.v1.FilesReply.files:type_name -> uploader.v1.File
+	7, // 1: uploader.v1.File.created_at:type_name -> google.protobuf.Timestamp
+	0, // 2: uploader.v1.Uploader.StartUpload:input_type -> uploader.v1.UploadRequest
+	1, // 3: uploader.v1.Uploader.GetUploadStatus:input_type -> uploader.v1.UploadID
+	4, // 4: uploader.v1.Uploader.GetFiles:input_type -> uploader.v1.UserInfo
+	2, // 5: uploader.v1.Uploader.StartUpload:output_type -> uploader.v1.UploadReply
+	3, // 6: uploader.v1.Uploader.GetUploadStatus:output_type -> uploader.v1.StatusReply
+	5, // 7: uploader.v1.Uploader.GetFiles:output_type -> uploader.v1.FilesReply
 	5, // [5:8] is the sub-list for method output_type
 	2, // [2:5] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
@@ -497,26 +497,26 @@ var file_api_start_upload_proto_depIdxs = []int32{
 	0, // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_api_start_upload_proto_init() }
-func file_api_start_upload_proto_init() {
-	if File_api_start_upload_proto != nil {
+func init() { file_api_uploader_v1_uploader_proto_init() }
+func file_api_uploader_v1_uploader_proto_init() {
+	if File_api_uploader_v1_uploader_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_start_upload_proto_rawDesc), len(file_api_start_upload_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_uploader_v1_uploader_proto_rawDesc), len(file_api_uploader_v1_uploader_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_start_upload_proto_goTypes,
-		DependencyIndexes: file_api_start_upload_proto_depIdxs,
-		MessageInfos:      file_api_start_upload_proto_msgTypes,
+		GoTypes:           file_api_uploader_v1_uploader_proto_goTypes,
+		DependencyIndexes: file_api_uploader_v1_uploader_proto_depIdxs,
+		MessageInfos:      file_api_uploader_v1_uploader_proto_msgTypes,
 	}.Build()
-	File_api_start_upload_proto = out.File
-	file_api_start_upload_proto_goTypes = nil
-	file_api_start_upload_proto_depIdxs = nil
+	File_api_uploader_v1_uploader_proto = out.File
+	file_api_uploader_v1_uploader_proto_goTypes = nil
+	file_api_uploader_v1_uploader_proto_depIdxs = nil
 }

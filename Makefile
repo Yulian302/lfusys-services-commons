@@ -1,9 +1,12 @@
-gen:
-	@protoc --go_out=. \
-	--go_opt=paths=source_relative \
+.PHONY: proto-gen
+proto-gen:
+	@if [ -z "$(PROTO_PATH)" ]; then echo "Usage: proto-gen PROTO_PATH=<path_to_proto_file>"; exit 1;fi
+	@protoc \
+	--go_out=. \
 	--go-grpc_out=. \
+	--go_opt=paths=source_relative \
 	--go-grpc_opt=paths=source_relative \
-	api/start_upload.proto
+	$$PROTO_PATH
 jaeger:
 	@docker run \
 		--rm \

@@ -60,7 +60,7 @@ func LoadConfig() Config {
 	sessionGrpcAddr := EnvVar("SESSION_GRPC_ADDR", ":50051")
 	sessionGrpcUrl := EnvVar("SESSION_GRPC_URL", "localhost:50051")
 
-	uploadsUrl := EnvVar("UPLOADS_URL", "http://localhost:8081")
+	uploadsUrl := EnvVar("UPLOADS_URL", "http://localhost:8081/api/v1")
 	uploadsAddr := EnvVar("UPLOADS_ADDR", ":8080")
 
 	jwtRefreshSecretKey := EnvVar("JWT_REFRESH_SECRET_KEY", "")

@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/Yulian302/lfusys-services-commons/api/uploader/v1;upoaderv1";
 package uploader.v1;
@@ -13,11 +14,14 @@ service Uploader {
   rpc GetUploadStatus (UploadID) returns (StatusReply);
   // gets all user's files
   rpc GetFiles (UserInfo) returns (FilesReply);
+  // deletes a single user file
+  rpc DeleteFile (FileDeleteRequest) returns (google.protobuf.Empty);
 }
 
 message UploadRequest {
   string user_email = 1;
   uint64 file_size  = 2;
+  uint64 chunk_size = 3;
 }
 
 message UploadID {
@@ -25,9 +29,8 @@ message UploadID {
 }
 
 message UploadReply{
-  string          upload_id    = 1;
-  uint32          total_chunks = 2;
-  repeated string upload_urls  = 3;
+  string upload_id    = 1;
+  uint32 total_chunks = 2;
 }
 
 message StatusReply{
@@ -54,3 +57,6 @@ message File {
   google.protobuf.Timestamp created_at   = 7;
 }
 
+message FileDeleteRequest{
+  string file_id = 1;
+}

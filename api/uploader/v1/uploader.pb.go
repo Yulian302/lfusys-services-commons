@@ -9,6 +9,7 @@ package upoaderv1
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
@@ -26,6 +27,7 @@ type UploadRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserEmail     string                 `protobuf:"bytes,1,opt,name=user_email,json=userEmail,proto3" json:"user_email,omitempty"`
 	FileSize      uint64                 `protobuf:"varint,2,opt,name=file_size,json=fileSize,proto3" json:"file_size,omitempty"`
+	ChunkSize     uint64                 `protobuf:"varint,3,opt,name=chunk_size,json=chunkSize,proto3" json:"chunk_size,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -70,6 +72,13 @@ func (x *UploadRequest) GetUserEmail() string {
 func (x *UploadRequest) GetFileSize() uint64 {
 	if x != nil {
 		return x.FileSize
+	}
+	return 0
+}
+
+func (x *UploadRequest) GetChunkSize() uint64 {
+	if x != nil {
+		return x.ChunkSize
 	}
 	return 0
 }
@@ -410,15 +419,61 @@ func (x *File) GetCreatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+type FileDeleteRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FileId        string                 `protobuf:"bytes,1,opt,name=file_id,json=fileId,proto3" json:"file_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FileDeleteRequest) Reset() {
+	*x = FileDeleteRequest{}
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FileDeleteRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileDeleteRequest) ProtoMessage() {}
+
+func (x *FileDeleteRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileDeleteRequest.ProtoReflect.Descriptor instead.
+func (*FileDeleteRequest) Descriptor() ([]byte, []int) {
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *FileDeleteRequest) GetFileId() string {
+	if x != nil {
+		return x.FileId
+	}
+	return ""
+}
+
 var File_api_uploader_v1_uploader_proto protoreflect.FileDescriptor
 
 const file_api_uploader_v1_uploader_proto_rawDesc = "" +
 	"\n" +
-	"\x1eapi/uploader/v1/uploader.proto\x12\vuploader.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"K\n" +
+	"\x1eapi/uploader/v1/uploader.proto\x12\vuploader.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"j\n" +
 	"\rUploadRequest\x12\x1d\n" +
 	"\n" +
 	"user_email\x18\x01 \x01(\tR\tuserEmail\x12\x1b\n" +
-	"\tfile_size\x18\x02 \x01(\x04R\bfileSize\"'\n" +
+	"\tfile_size\x18\x02 \x01(\x04R\bfileSize\x12\x1d\n" +
+	"\n" +
+	"chunk_size\x18\x03 \x01(\x04R\tchunkSize\"'\n" +
 	"\bUploadID\x12\x1b\n" +
 	"\tupload_id\x18\x01 \x01(\tR\buploadId\"M\n" +
 	"\vUploadReply\x12\x1b\n" +
@@ -442,11 +497,15 @@ const file_api_uploader_v1_uploader_proto_rawDesc = "" +
 	"\ftotal_chunks\x18\x05 \x01(\rR\vtotalChunks\x12\x1a\n" +
 	"\bchecksum\x18\x06 \x01(\tR\bchecksum\x129\n" +
 	"\n" +
-	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt2\xcf\x01\n" +
+	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\",\n" +
+	"\x11FileDeleteRequest\x12\x17\n" +
+	"\afile_id\x18\x01 \x01(\tR\x06fileId2\x95\x02\n" +
 	"\bUploader\x12C\n" +
 	"\vStartUpload\x12\x1a.uploader.v1.UploadRequest\x1a\x18.uploader.v1.UploadReply\x12B\n" +
 	"\x0fGetUploadStatus\x12\x15.uploader.v1.UploadID\x1a\x18.uploader.v1.StatusReply\x12:\n" +
-	"\bGetFiles\x12\x15.uploader.v1.UserInfo\x1a\x17.uploader.v1.FilesReplyBHZFgithub.com/Yulian302/lfusys-services-commons/api/uploader/v1;upoaderv1b\x06proto3"
+	"\bGetFiles\x12\x15.uploader.v1.UserInfo\x1a\x17.uploader.v1.FilesReply\x12D\n" +
+	"\n" +
+	"DeleteFile\x12\x1e.uploader.v1.FileDeleteRequest\x1a\x16.google.protobuf.EmptyBHZFgithub.com/Yulian302/lfusys-services-commons/api/uploader/v1;upoaderv1b\x06proto3"
 
 var (
 	file_api_uploader_v1_uploader_proto_rawDescOnce sync.Once
@@ -460,7 +519,7 @@ func file_api_uploader_v1_uploader_proto_rawDescGZIP() []byte {
 	return file_api_uploader_v1_uploader_proto_rawDescData
 }
 
-var file_api_uploader_v1_uploader_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_api_uploader_v1_uploader_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_api_uploader_v1_uploader_proto_goTypes = []any{
 	(*UploadRequest)(nil),         // 0: uploader.v1.UploadRequest
 	(*UploadID)(nil),              // 1: uploader.v1.UploadID
@@ -469,19 +528,23 @@ var file_api_uploader_v1_uploader_proto_goTypes = []any{
 	(*UserInfo)(nil),              // 4: uploader.v1.UserInfo
 	(*FilesReply)(nil),            // 5: uploader.v1.FilesReply
 	(*File)(nil),                  // 6: uploader.v1.File
-	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
+	(*FileDeleteRequest)(nil),     // 7: uploader.v1.FileDeleteRequest
+	(*timestamppb.Timestamp)(nil), // 8: google.protobuf.Timestamp
+	(*emptypb.Empty)(nil),         // 9: google.protobuf.Empty
 }
 var file_api_uploader_v1_uploader_proto_depIdxs = []int32{
 	6, // 0: uploader.v1.FilesReply.files:type_name -> uploader.v1.File
-	7, // 1: uploader.v1.File.created_at:type_name -> google.protobuf.Timestamp
+	8, // 1: uploader.v1.File.created_at:type_name -> google.protobuf.Timestamp
 	0, // 2: uploader.v1.Uploader.StartUpload:input_type -> uploader.v1.UploadRequest
 	1, // 3: uploader.v1.Uploader.GetUploadStatus:input_type -> uploader.v1.UploadID
 	4, // 4: uploader.v1.Uploader.GetFiles:input_type -> uploader.v1.UserInfo
-	2, // 5: uploader.v1.Uploader.StartUpload:output_type -> uploader.v1.UploadReply
-	3, // 6: uploader.v1.Uploader.GetUploadStatus:output_type -> uploader.v1.StatusReply
-	5, // 7: uploader.v1.Uploader.GetFiles:output_type -> uploader.v1.FilesReply
-	5, // [5:8] is the sub-list for method output_type
-	2, // [2:5] is the sub-list for method input_type
+	7, // 5: uploader.v1.Uploader.DeleteFile:input_type -> uploader.v1.FileDeleteRequest
+	2, // 6: uploader.v1.Uploader.StartUpload:output_type -> uploader.v1.UploadReply
+	3, // 7: uploader.v1.Uploader.GetUploadStatus:output_type -> uploader.v1.StatusReply
+	5, // 8: uploader.v1.Uploader.GetFiles:output_type -> uploader.v1.FilesReply
+	9, // 9: uploader.v1.Uploader.DeleteFile:output_type -> google.protobuf.Empty
+	6, // [6:10] is the sub-list for method output_type
+	2, // [2:6] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
 	2, // [2:2] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name
@@ -498,7 +561,7 @@ func file_api_uploader_v1_uploader_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_uploader_v1_uploader_proto_rawDesc), len(file_api_uploader_v1_uploader_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

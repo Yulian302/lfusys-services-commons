@@ -19,6 +19,7 @@ var (
 	ErrSessionConflict            = errors.New("session already exists")
 	ErrGrpcFailed                 = errors.New("grpc call failed")
 	ErrSessionNotFound            = errors.New("session not found")
+	ErrFileNotFound               = errors.New("file not found")
 	ErrSessionUpdateDetails       = errors.New("could not update session details")
 	ErrUploadCompleteNotifyFailed = errors.New("upload complete notification failed")
 

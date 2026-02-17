@@ -25,9 +25,8 @@ message UploadID {
 }
 
 message UploadReply{
-  string          upload_id    = 1;
-  uint32          total_chunks = 2;
-  repeated string upload_urls  = 3;
+  string upload_id    = 1;
+  uint32 total_chunks = 2;
 }
 
 message StatusReply{
@@ -53,4 +52,3 @@ message File {
   string                    checksum     = 6;
   google.protobuf.Timestamp created_at   = 7;
 }
-

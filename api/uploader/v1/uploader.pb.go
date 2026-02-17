@@ -122,7 +122,6 @@ type UploadReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UploadId      string                 `protobuf:"bytes,1,opt,name=upload_id,json=uploadId,proto3" json:"upload_id,omitempty"`
 	TotalChunks   uint32                 `protobuf:"varint,2,opt,name=total_chunks,json=totalChunks,proto3" json:"total_chunks,omitempty"`
-	UploadUrls    []string               `protobuf:"bytes,3,rep,name=upload_urls,json=uploadUrls,proto3" json:"upload_urls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -169,13 +168,6 @@ func (x *UploadReply) GetTotalChunks() uint32 {
 		return x.TotalChunks
 	}
 	return 0
-}
-
-func (x *UploadReply) GetUploadUrls() []string {
-	if x != nil {
-		return x.UploadUrls
-	}
-	return nil
 }
 
 type StatusReply struct {
@@ -428,12 +420,10 @@ const file_api_uploader_v1_uploader_proto_rawDesc = "" +
 	"user_email\x18\x01 \x01(\tR\tuserEmail\x12\x1b\n" +
 	"\tfile_size\x18\x02 \x01(\x04R\bfileSize\"'\n" +
 	"\bUploadID\x12\x1b\n" +
-	"\tupload_id\x18\x01 \x01(\tR\buploadId\"n\n" +
+	"\tupload_id\x18\x01 \x01(\tR\buploadId\"M\n" +
 	"\vUploadReply\x12\x1b\n" +
 	"\tupload_id\x18\x01 \x01(\tR\buploadId\x12!\n" +
-	"\ftotal_chunks\x18\x02 \x01(\rR\vtotalChunks\x12\x1f\n" +
-	"\vupload_urls\x18\x03 \x03(\tR\n" +
-	"uploadUrls\"[\n" +
+	"\ftotal_chunks\x18\x02 \x01(\rR\vtotalChunks\"[\n" +
 	"\vStatusReply\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\tR\x06status\x12\x1a\n" +
 	"\bprogress\x18\x02 \x01(\rR\bprogress\x12\x18\n" +

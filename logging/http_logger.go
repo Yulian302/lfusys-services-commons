@@ -4,8 +4,26 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"os"
 	"time"
 )
+
+func CreateHttpLogger(env string) *slog.Logger {
+	var handler slog.Handler
+
+	switch env {
+	case "DEV":
+		handler = PrettyHandler{
+			h: slog.NewTextHandler(os.Stdout, nil),
+		}
+	default:
+		handler = slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+			Level: slog.LevelInfo,
+		})
+	}
+
+	return slog.New(handler)
+}
 
 type PrettyHandler struct {
 	h     slog.Handler

@@ -7,21 +7,18 @@ import (
 )
 
 func CreateAppLogger(env string) *slog.Logger {
+	header := "\033[33mAPP \033[0m"
 	level := resolveLevel(env)
 
 	opts := &slog.HandlerOptions{
 		Level: level,
 	}
 
-	var handler slog.Handler
-
 	if strings.EqualFold(env, "DEV") {
-		handler = slog.NewTextHandler(os.Stdout, opts)
-	} else {
-		handler = slog.NewJSONHandler(os.Stdout, opts)
+		return slog.New(NewPrettyHandler(os.Stdout, header))
 	}
 
-	return slog.New(handler)
+	return slog.New(slog.NewJSONHandler(os.Stdout, opts))
 }
 
 func resolveLevel(env string) slog.Level {

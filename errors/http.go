@@ -1,8 +1,6 @@
 package errors
 
 import (
-	"log"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -45,8 +43,6 @@ func NewForbiddenError(msg string) HTTPError {
 	}
 }
 
-// responses
-
 func JSONErrorResponse(ctx *gin.Context, httpError HTTPError) {
 	ctx.JSON(httpError.Code, gin.H{
 		"error": httpError.Error,
@@ -54,7 +50,6 @@ func JSONErrorResponse(ctx *gin.Context, httpError HTTPError) {
 }
 
 func InternalServerErrorResponse(ctx *gin.Context, msg string) {
-	log.Printf("Internal server error: %v", msg)
 	if gin.Mode() == gin.DebugMode {
 		JSONErrorResponse(ctx, NewInternalServerError(msg))
 	} else {

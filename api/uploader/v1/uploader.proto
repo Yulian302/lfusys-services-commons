@@ -58,5 +58,6 @@ message File {
 }
 
 message FileDeleteRequest{
-  string file_id = 1;
+  string file_id     = 1;
+  string owner_email = 2;
 }

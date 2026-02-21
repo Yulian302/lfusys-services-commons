@@ -422,6 +422,7 @@ func (x *File) GetCreatedAt() *timestamppb.Timestamp {
 type FileDeleteRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FileId        string                 `protobuf:"bytes,1,opt,name=file_id,json=fileId,proto3" json:"file_id,omitempty"`
+	OwnerEmail    string                 `protobuf:"bytes,2,opt,name=owner_email,json=ownerEmail,proto3" json:"owner_email,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -463,6 +464,13 @@ func (x *FileDeleteRequest) GetFileId() string {
 	return ""
 }
 
+func (x *FileDeleteRequest) GetOwnerEmail() string {
+	if x != nil {
+		return x.OwnerEmail
+	}
+	return ""
+}
+
 var File_api_uploader_v1_uploader_proto protoreflect.FileDescriptor
 
 const file_api_uploader_v1_uploader_proto_rawDesc = "" +
@@ -497,9 +505,11 @@ const file_api_uploader_v1_uploader_proto_rawDesc = "" +
 	"\ftotal_chunks\x18\x05 \x01(\rR\vtotalChunks\x12\x1a\n" +
 	"\bchecksum\x18\x06 \x01(\tR\bchecksum\x129\n" +
 	"\n" +
-	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\",\n" +
+	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"M\n" +
 	"\x11FileDeleteRequest\x12\x17\n" +
-	"\afile_id\x18\x01 \x01(\tR\x06fileId2\x95\x02\n" +
+	"\afile_id\x18\x01 \x01(\tR\x06fileId\x12\x1f\n" +
+	"\vowner_email\x18\x02 \x01(\tR\n" +
+	"ownerEmail2\x95\x02\n" +
 	"\bUploader\x12C\n" +
 	"\vStartUpload\x12\x1a.uploader.v1.UploadRequest\x1a\x18.uploader.v1.UploadReply\x12B\n" +
 	"\x0fGetUploadStatus\x12\x15.uploader.v1.UploadID\x1a\x18.uploader.v1.StatusReply\x12:\n" +

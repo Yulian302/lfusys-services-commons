@@ -104,3 +104,38 @@ func IsRetriableS3Error(err error) bool {
 
 	return true
 }
+
+func IsRetriableSQSError(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	if IsContextError(err) {
+		return false
+	}
+
+	var apiErr smithy.APIError
+	if errors.As(err, &apiErr) {
+		switch apiErr.ErrorCode() {
+
+		// Throttling
+		case "Throttling",
+			"ThrottlingException",
+			"RequestThrottled":
+			return true
+
+		// Transient service faults
+		case "ServiceUnavailable",
+			"InternalError",
+			"InternalFailure":
+			return true
+
+		default:
+			return false
+		}
+	}
+
+	// If it's not an AWS API error,
+	// assume network/transport layer (timeout, EOF, etc.)
+	return true
+}

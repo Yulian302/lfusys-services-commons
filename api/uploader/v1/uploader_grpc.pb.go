@@ -23,7 +23,9 @@ const (
 	Uploader_StartUpload_FullMethodName     = "/uploader.v1.Uploader/StartUpload"
 	Uploader_GetUploadStatus_FullMethodName = "/uploader.v1.Uploader/GetUploadStatus"
 	Uploader_GetFiles_FullMethodName        = "/uploader.v1.Uploader/GetFiles"
+	Uploader_GetFileById_FullMethodName     = "/uploader.v1.Uploader/GetFileById"
 	Uploader_DeleteFile_FullMethodName      = "/uploader.v1.Uploader/DeleteFile"
+	Uploader_GetDownUrl_FullMethodName      = "/uploader.v1.Uploader/GetDownUrl"
 )
 
 // UploaderClient is the client API for Uploader service.
@@ -38,8 +40,12 @@ type UploaderClient interface {
 	GetUploadStatus(ctx context.Context, in *UploadID, opts ...grpc.CallOption) (*StatusReply, error)
 	// gets all user's files
 	GetFiles(ctx context.Context, in *UserInfo, opts ...grpc.CallOption) (*FilesReply, error)
+	// gets file by id
+	GetFileById(ctx context.Context, in *FileByIdRequest, opts ...grpc.CallOption) (*File, error)
 	// deletes a single user file
 	DeleteFile(ctx context.Context, in *FileDeleteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// generates and gets a file download url
+	GetDownUrl(ctx context.Context, in *FileDownUrlRequest, opts ...grpc.CallOption) (*FileDownUrlReply, error)
 }
 
 type uploaderClient struct {
@@ -80,10 +86,30 @@ func (c *uploaderClient) GetFiles(ctx context.Context, in *UserInfo, opts ...grp
 	return out, nil
 }
 
+func (c *uploaderClient) GetFileById(ctx context.Context, in *FileByIdRequest, opts ...grpc.CallOption) (*File, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(File)
+	err := c.cc.Invoke(ctx, Uploader_GetFileById_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *uploaderClient) DeleteFile(ctx context.Context, in *FileDeleteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, Uploader_DeleteFile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *uploaderClient) GetDownUrl(ctx context.Context, in *FileDownUrlRequest, opts ...grpc.CallOption) (*FileDownUrlReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FileDownUrlReply)
+	err := c.cc.Invoke(ctx, Uploader_GetDownUrl_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -102,8 +128,12 @@ type UploaderServer interface {
 	GetUploadStatus(context.Context, *UploadID) (*StatusReply, error)
 	// gets all user's files
 	GetFiles(context.Context, *UserInfo) (*FilesReply, error)
+	// gets file by id
+	GetFileById(context.Context, *FileByIdRequest) (*File, error)
 	// deletes a single user file
 	DeleteFile(context.Context, *FileDeleteRequest) (*emptypb.Empty, error)
+	// generates and gets a file download url
+	GetDownUrl(context.Context, *FileDownUrlRequest) (*FileDownUrlReply, error)
 	mustEmbedUnimplementedUploaderServer()
 }
 
@@ -123,8 +153,14 @@ func (UnimplementedUploaderServer) GetUploadStatus(context.Context, *UploadID) (
 func (UnimplementedUploaderServer) GetFiles(context.Context, *UserInfo) (*FilesReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetFiles not implemented")
 }
+func (UnimplementedUploaderServer) GetFileById(context.Context, *FileByIdRequest) (*File, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetFileById not implemented")
+}
 func (UnimplementedUploaderServer) DeleteFile(context.Context, *FileDeleteRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteFile not implemented")
+}
+func (UnimplementedUploaderServer) GetDownUrl(context.Context, *FileDownUrlRequest) (*FileDownUrlReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetDownUrl not implemented")
 }
 func (UnimplementedUploaderServer) mustEmbedUnimplementedUploaderServer() {}
 func (UnimplementedUploaderServer) testEmbeddedByValue()                  {}
@@ -201,6 +237,24 @@ func _Uploader_GetFiles_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Uploader_GetFileById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FileByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UploaderServer).GetFileById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Uploader_GetFileById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UploaderServer).GetFileById(ctx, req.(*FileByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Uploader_DeleteFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FileDeleteRequest)
 	if err := dec(in); err != nil {
@@ -215,6 +269,24 @@ func _Uploader_DeleteFile_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UploaderServer).DeleteFile(ctx, req.(*FileDeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Uploader_GetDownUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FileDownUrlRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UploaderServer).GetDownUrl(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Uploader_GetDownUrl_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UploaderServer).GetDownUrl(ctx, req.(*FileDownUrlRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -239,8 +311,16 @@ var Uploader_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Uploader_GetFiles_Handler,
 		},
 		{
+			MethodName: "GetFileById",
+			Handler:    _Uploader_GetFileById_Handler,
+		},
+		{
 			MethodName: "DeleteFile",
 			Handler:    _Uploader_DeleteFile_Handler,
+		},
+		{
+			MethodName: "GetDownUrl",
+			Handler:    _Uploader_GetDownUrl_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -23,5 +23,8 @@ var (
 	ErrSessionUpdateDetails       = errors.New("could not update session details")
 	ErrUploadCompleteNotifyFailed = errors.New("upload complete notification failed")
 
+	// file storage
+	ErrFileObjectAlreadyExists = errors.New("file object already exists")
+
 	ErrServiceUnavailable = errors.New("service unavailable")
 )

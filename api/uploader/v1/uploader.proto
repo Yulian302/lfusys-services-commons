@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/duration.proto";
 
 option go_package = "github.com/Yulian302/lfusys-services-commons/api/uploader/v1;upoaderv1";
 package uploader.v1;
@@ -14,14 +15,20 @@ service Uploader {
   rpc GetUploadStatus (UploadID) returns (StatusReply);
   // gets all user's files
   rpc GetFiles (UserInfo) returns (FilesReply);
+  // gets file by id
+  rpc GetFileById (FileByIdRequest) returns (File);
   // deletes a single user file
   rpc DeleteFile (FileDeleteRequest) returns (google.protobuf.Empty);
+  // generates and gets a file download url
+  rpc GetDownUrl (FileDownUrlRequest) returns (FileDownUrlReply);
 }
 
 message UploadRequest {
   string user_email = 1;
   uint64 file_size  = 2;
   uint64 chunk_size = 3;
+  string file_name  = 4;
+  string file_type  = 5;
 }
 
 message UploadID {
@@ -47,6 +54,11 @@ message FilesReply {
   repeated File files = 1;
 }
 
+message FileByIdRequest {
+  string email   = 1;
+  string file_id = 2;
+}
+
 message File {
   string                    id           = 1;
   string                    upload_id    = 2;
@@ -55,9 +67,20 @@ message File {
   uint32                    total_chunks = 5;
   string                    checksum     = 6;
   google.protobuf.Timestamp created_at   = 7;
+  string                    name         = 8;
+  string                    type         = 9;
 }
 
 message FileDeleteRequest{
   string file_id     = 1;
   string owner_email = 2;
+}
+
+message FileDownUrlRequest{
+  string                   file_id = 1;
+  google.protobuf.Duration ttl     = 2;
+}
+
+message FileDownUrlReply{
+  string url = 1;
 }

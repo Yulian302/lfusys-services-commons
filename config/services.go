@@ -3,7 +3,6 @@ package config
 import "errors"
 
 type ServiceConfig struct {
-	UploadsURL                    string
 	UploadsAddr                   string
 	UploadsNotificationsQueueName string
 	GatewayAddr                   string
@@ -12,10 +11,6 @@ type ServiceConfig struct {
 }
 
 func (c *ServiceConfig) Validate() error {
-	if c.UploadsURL == "" {
-		return errors.New("UPLOADS_URL is required")
-	}
-
 	if c.UploadsAddr == "" {
 		return errors.New("UPLOADS_ADDR is required")
 	}

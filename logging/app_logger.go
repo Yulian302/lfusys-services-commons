@@ -3,10 +3,11 @@ package logger
 import (
 	"log/slog"
 	"os"
-	"strings"
+
+	"github.com/Yulian302/lfusys-services-commons/config"
 )
 
-func CreateAppLogger(env string) *slog.Logger {
+func CreateAppLogger(env config.Environment) *slog.Logger {
 	header := "\033[33mAPP \033[0m"
 	level := resolveLevel(env)
 
@@ -14,15 +15,15 @@ func CreateAppLogger(env string) *slog.Logger {
 		Level: level,
 	}
 
-	if strings.EqualFold(env, "DEV") {
+	if env == config.EnvDevelopment {
 		return slog.New(NewPrettyHandler(os.Stdout, header))
 	}
 
 	return slog.New(slog.NewJSONHandler(os.Stdout, opts))
 }
 
-func resolveLevel(env string) slog.Level {
-	if strings.EqualFold(env, "DEV") {
+func resolveLevel(env config.Environment) slog.Level {
+	if env == config.EnvDevelopment {
 		return slog.LevelDebug
 	}
 	return slog.LevelInfo

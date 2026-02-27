@@ -1,38 +1,44 @@
 package config
 
-import "errors"
+import (
+	"fmt"
+	"strings"
+)
 
 type AWSConfig struct {
+	Region          string
+	AccountID       string
+	BucketName      string
 	AccessKeyID     string
 	SecretAccessKey string
-	AccountID       string
-	Region          string
-	BucketName      string
 }
 
 func (c *AWSConfig) Validate() error {
-	err := c.ValidateSecrets()
-	if err != nil {
-		return err
-	}
+	var errs []string
 
 	if c.Region == "" {
-		return errors.New("AWS_REGION_NAME is required")
+		errs = append(errs, "AWS_REGION_NAME is required")
+	}
+
+	if c.AccountID == "" {
+		errs = append(errs, "AWS_ACCOUNT_ID is required")
 	}
 
 	if c.BucketName == "" {
-		return errors.New("AWS_BUCKET is required")
+		errs = append(errs, "AWS_BUCKET is required")
 	}
 
-	return nil
-}
+	if len(errs) > 0 {
+		return fmt.Errorf("validation failed: %s", strings.Join(errs, "; "))
+	}
 
-func (c *AWSConfig) ValidateSecrets() error {
 	if c.AccessKeyID == "" {
-		return errors.New("AWS_ACCESS_KEY_ID is required")
+		fmt.Println("WARN: AWS_ACCESS_KEY_ID is not defined - will use default credentials chain")
 	}
+
 	if c.SecretAccessKey == "" {
-		return errors.New("AWS_SECRET_ACCESS_KEY is required")
+		fmt.Println("WARN: AWS_SECRET_ACCESS_KEY is not defined - will use default credentials chain")
 	}
+
 	return nil
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Yulian302/lfusys-services-commons/errors"
+	logger "github.com/Yulian302/lfusys-services-commons/logging"
 	"github.com/Yulian302/lfusys-services-commons/responses"
 	"github.com/gin-gonic/gin"
 )
@@ -11,10 +12,12 @@ import (
 type HealthHandler struct {
 	// critical services
 	checks []ReadinessCheck
+
+	logger logger.Logger
 }
 
-func NewHealthHandler(checks ...ReadinessCheck) *HealthHandler {
-	return &HealthHandler{checks: checks}
+func NewHealthHandler(l logger.Logger, checks ...ReadinessCheck) *HealthHandler {
+	return &HealthHandler{checks: checks, logger: l}
 }
 
 func (h *HealthHandler) Live(c *gin.Context) {
@@ -26,6 +29,7 @@ func (h *HealthHandler) Ready(c *gin.Context) {
 
 	for _, check := range h.checks {
 		if err := check.IsReady(ctx); err != nil {
+			h.logger.Error(fmt.Sprintf("service %s is not ready", check.Name()), "reason", err.Error())
 			errors.ServiceUnavailableResponse(c, fmt.Sprintf("service %s is not ready", check.Name()))
 			return
 		}

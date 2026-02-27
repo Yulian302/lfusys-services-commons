@@ -3,13 +3,14 @@ package logger
 import (
 	"log/slog"
 	"os"
-	"strings"
+
+	"github.com/Yulian302/lfusys-services-commons/config"
 )
 
-func CreateHttpLogger(env string) *slog.Logger {
+func CreateHttpLogger(env config.Environment) *slog.Logger {
 	header := "\033[35mHTTP \033[0m"
 
-	if strings.EqualFold(env, "DEV") {
+	if env == config.EnvDevelopment {
 		return slog.New(NewPrettyHandler(os.Stdout, header))
 	}
 

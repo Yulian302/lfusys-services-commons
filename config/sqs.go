@@ -5,15 +5,15 @@ import (
 	"strings"
 )
 
-type RedisConfig struct {
-	HOST string
+type SQSConfig struct {
+	QueueName string
 }
 
-func (c *RedisConfig) Validate() error {
+func (c *SQSConfig) Validate() error {
 	var errs []string
 
-	if c.HOST == "" {
-		errs = append(errs, "REDIS_HOST is required")
+	if c.QueueName == "" {
+		errs = append(errs, "UPLOADS_NOTIFICATIONS_QUEUE_NAME is required")
 	}
 
 	if len(errs) > 0 {

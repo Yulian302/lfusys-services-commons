@@ -1,6 +1,9 @@
 package config
 
-import "errors"
+import (
+	"fmt"
+	"strings"
+)
 
 type DynamoDBConfig struct {
 	UsersTableName   string
@@ -9,16 +12,22 @@ type DynamoDBConfig struct {
 }
 
 func (c *DynamoDBConfig) Validate() error {
+	var errs []string
+
 	if c.UsersTableName == "" {
-		return errors.New("USERS_TABLE_NAME is required")
+		errs = append(errs, "DYNAMODB_USERS_TABLE_NAME is required")
 	}
 
 	if c.UploadsTableName == "" {
-		return errors.New("UPLOADS_TABLE_NAME is required")
+		errs = append(errs, "DYNAMODB_UPLOADS_TABLE_NAME is required")
 	}
 
 	if c.FilesTableName == "" {
-		return errors.New("FILES_TABLE_NAME is required")
+		errs = append(errs, "DYNAMODB_FILES_TABLE_NAME is required")
+	}
+
+	if len(errs) > 0 {
+		return fmt.Errorf("validation failed: %s", strings.Join(errs, "; "))
 	}
 
 	return nil

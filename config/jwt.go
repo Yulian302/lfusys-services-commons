@@ -1,6 +1,9 @@
 package config
 
-import "errors"
+import (
+	"fmt"
+	"strings"
+)
 
 type JWTConfig struct {
 	SecretKey        string
@@ -8,12 +11,18 @@ type JWTConfig struct {
 }
 
 func (c JWTConfig) ValidateSecrets() error {
+	var errs []string
+
 	if c.SecretKey == "" {
-		return errors.New("JWT_SECRET_KEY is required")
+		errs = append(errs, "JWT_SECRET_KEY is required")
 	}
 
 	if c.RefreshSecretKey == "" {
-		return errors.New("JWT_REFRESH_SECRET_KEY key is required")
+		errs = append(errs, "JWT_REFRESH_SECRET_KEY key is required")
+	}
+
+	if len(errs) > 0 {
+		return fmt.Errorf("validation failed: %s", strings.Join(errs, "; "))
 	}
 
 	return nil

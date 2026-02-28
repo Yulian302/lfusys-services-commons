@@ -39,15 +39,28 @@ type Config struct {
 	Service  ServiceConfig
 }
 
-type ConfigBuilder struct {
+type ConfigBuilder interface {
+	WithDevTools() ConfigBuilder
+	WithCors() ConfigBuilder
+	WithAws() ConfigBuilder
+	WithOAuth() ConfigBuilder
+	WithJWTAuth() ConfigBuilder
+	WithDynamoDB() ConfigBuilder
+	WithSQS() ConfigBuilder
+	WithRedis() ConfigBuilder
+	WithService(ServiceName) ConfigBuilder
+	Build() (Config, error)
+}
+
+type ConfigBuilderImpl struct {
 	config *Config
 	errors []error
 }
 
-func NewConfigBuilder() *ConfigBuilder {
-	return &ConfigBuilder{
+func NewConfigBuilder() *ConfigBuilderImpl {
+	return &ConfigBuilderImpl{
 		config: &Config{},
-		errors: []error{},
+		errors: make([]error, 0),
 	}
 }
 
@@ -76,7 +89,7 @@ func (c *Config) ValidateEnv() error {
 	}
 }
 
-func (b *ConfigBuilder) WithDevTools() *ConfigBuilder {
+func (b *ConfigBuilderImpl) WithDevTools() ConfigBuilder {
 	tracing, _ := strconv.ParseBool(EnvVar("TRACING", "false"))
 	b.config.Tracing = tracing
 	b.config.TracingAddr = EnvVar("TRACING_ADDR", "jaeger:4317")
@@ -84,7 +97,7 @@ func (b *ConfigBuilder) WithDevTools() *ConfigBuilder {
 	return b
 }
 
-func (b *ConfigBuilder) WithCors() *ConfigBuilder {
+func (b *ConfigBuilderImpl) WithCors() ConfigBuilder {
 	allowCredentials, _ := strconv.ParseBool(EnvVar("CORS_ALLOW_CREDENTIALS", ""))
 	corsCfg := CorsConfig{
 		Origins:     EnvVar("CORS_ALLOW_ORIGINS", ""),
@@ -102,7 +115,7 @@ func (b *ConfigBuilder) WithCors() *ConfigBuilder {
 	return b
 }
 
-func (b *ConfigBuilder) WithAws() *ConfigBuilder {
+func (b *ConfigBuilderImpl) WithAws() ConfigBuilder {
 	awsCfg := AWSConfig{
 		AccessKeyID:     EnvVar("AWS_ACCESS_KEY_ID", ""),
 		SecretAccessKey: EnvVar("AWS_SECRET_ACCESS_KEY", ""),
@@ -120,7 +133,7 @@ func (b *ConfigBuilder) WithAws() *ConfigBuilder {
 	return b
 }
 
-func (b *ConfigBuilder) WithOAuth() *ConfigBuilder {
+func (b *ConfigBuilderImpl) WithOAuth() ConfigBuilder {
 	oAuthCfg := OAuthConfig{
 		Github: GithubConfig{
 			ClientID:     EnvVar("OAUTH2_GITHUB_CLIENT_ID", ""),
@@ -150,7 +163,7 @@ func (b *ConfigBuilder) WithOAuth() *ConfigBuilder {
 	return b
 }
 
-func (b *ConfigBuilder) WithJWTAuth() *ConfigBuilder {
+func (b *ConfigBuilderImpl) WithJWTAuth() ConfigBuilder {
 	jwtCfg := JWTConfig{
 
 		RefreshSecretKey: EnvVar("JWT_REFRESH_SECRET_KEY", ""),
@@ -166,7 +179,7 @@ func (b *ConfigBuilder) WithJWTAuth() *ConfigBuilder {
 	return b
 }
 
-func (b *ConfigBuilder) WithDynamoDB() *ConfigBuilder {
+func (b *ConfigBuilderImpl) WithDynamoDB() ConfigBuilder {
 	dbCfg := DynamoDBConfig{
 		UsersTableName:   EnvVar("DYNAMODB_USERS_TABLE_NAME", ""),
 		UploadsTableName: EnvVar("DYNAMODB_UPLOADS_TABLE_NAME", ""),
@@ -182,7 +195,7 @@ func (b *ConfigBuilder) WithDynamoDB() *ConfigBuilder {
 	return b
 }
 
-func (b *ConfigBuilder) WithSQS() *ConfigBuilder {
+func (b *ConfigBuilderImpl) WithSQS() ConfigBuilder {
 	sqsCfg := SQSConfig{
 		QueueName: EnvVar("UPLOADS_NOTIFICATIONS_QUEUE_NAME", ""),
 	}
@@ -196,7 +209,7 @@ func (b *ConfigBuilder) WithSQS() *ConfigBuilder {
 	return b
 }
 
-func (b *ConfigBuilder) WithRedis() *ConfigBuilder {
+func (b *ConfigBuilderImpl) WithRedis() ConfigBuilder {
 	redisCfg := RedisConfig{
 		HOST: EnvVar("REDIS_HOST", ""),
 	}
@@ -210,14 +223,14 @@ func (b *ConfigBuilder) WithRedis() *ConfigBuilder {
 	return b
 }
 
-func (b *ConfigBuilder) WithService(serviceName ServiceName) *ConfigBuilder {
+func (b *ConfigBuilderImpl) WithService(serviceName ServiceName) ConfigBuilder {
 	switch serviceName {
 	case Gateway:
-		b.WithGateway()
+		b.withGateway()
 	case Sessions:
-		b.WithSessions()
+		b.withSessions()
 	case Uploads:
-		b.WithUploads()
+		b.withUploads()
 	default:
 		b.errors = append(b.errors, fmt.Errorf("unknown service name: %s", serviceName))
 	}
@@ -225,7 +238,7 @@ func (b *ConfigBuilder) WithService(serviceName ServiceName) *ConfigBuilder {
 	return b
 }
 
-func (b *ConfigBuilder) WithGateway() *ConfigBuilder {
+func (b *ConfigBuilderImpl) withGateway() *ConfigBuilderImpl {
 	cfg := GatewayConfig{
 		Addr:            EnvVar("GATEWAY_ADDR", ""),
 		SessionsGRPCUrl: EnvVar("SESSIONS_GRPC_URL", ""),
@@ -240,7 +253,7 @@ func (b *ConfigBuilder) WithGateway() *ConfigBuilder {
 	return b
 }
 
-func (b *ConfigBuilder) WithSessions() *ConfigBuilder {
+func (b *ConfigBuilderImpl) withSessions() *ConfigBuilderImpl {
 	cfg := SessionsConfig{
 		Addr: EnvVar("SESSIONS_GRPC_ADDR", ""),
 	}
@@ -253,7 +266,7 @@ func (b *ConfigBuilder) WithSessions() *ConfigBuilder {
 	return b
 }
 
-func (b *ConfigBuilder) WithUploads() *ConfigBuilder {
+func (b *ConfigBuilderImpl) withUploads() *ConfigBuilderImpl {
 	cfg := UploadsConfig{
 		Addr:        EnvVar("UPLOADS_ADDR", ""),
 		FrontendUrl: EnvVar("FRONTEND_URL", ""),
@@ -267,7 +280,7 @@ func (b *ConfigBuilder) WithUploads() *ConfigBuilder {
 	return b
 }
 
-func (b *ConfigBuilder) Build() (Config, error) {
+func (b *ConfigBuilderImpl) Build() (Config, error) {
 	if len(b.errors) > 0 {
 		return Config{}, fmt.Errorf("config errors: %v", b.errors)
 	}
@@ -276,7 +289,6 @@ func (b *ConfigBuilder) Build() (Config, error) {
 
 func LoadConfig(opts ConfigOptions, serviceName ServiceName) (Config, error) {
 	b := NewConfigBuilder()
-
 	b.config.Env = ParseEnvironment(EnvVar("ENV", string(EnvDevelopment)))
 
 	// service-specific

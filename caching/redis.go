@@ -5,11 +5,17 @@ import (
 	"time"
 
 	logger "github.com/Yulian302/lfusys-services-commons/logging"
+	"github.com/Yulian302/lfusys-services-commons/misc"
 	"github.com/redis/go-redis/v9"
 )
 
 const (
 	cacheTimeout = 50 * time.Millisecond
+
+	// cache ttl
+	SessionTTL = 30 * time.Minute
+	// with invalidation on write
+	UserFilesTTL = 12 * time.Hour
 )
 
 type RedisCachingService struct {
@@ -46,7 +52,7 @@ func (svc *RedisCachingService) Set(ctx context.Context, key string, value strin
 	ctx, cancel := context.WithTimeout(ctx, cacheTimeout)
 	defer cancel()
 
-	err := svc.client.Set(ctx, key, value, ttl).Err()
+	err := svc.client.Set(ctx, key, value, misc.AddJitter(ttl)).Err()
 	if err != nil {
 		svc.logger.Debug("cache set failed",
 			"key", key,

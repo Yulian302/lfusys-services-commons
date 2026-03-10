@@ -256,6 +256,50 @@ func (x *StatusReply) GetMessage() string {
 	return ""
 }
 
+type UploadedChunksReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Chunks        []uint32               `protobuf:"varint,1,rep,packed,name=chunks,proto3" json:"chunks,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UploadedChunksReply) Reset() {
+	*x = UploadedChunksReply{}
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UploadedChunksReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadedChunksReply) ProtoMessage() {}
+
+func (x *UploadedChunksReply) ProtoReflect() protoreflect.Message {
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadedChunksReply.ProtoReflect.Descriptor instead.
+func (*UploadedChunksReply) Descriptor() ([]byte, []int) {
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *UploadedChunksReply) GetChunks() []uint32 {
+	if x != nil {
+		return x.Chunks
+	}
+	return nil
+}
+
 type UserInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
@@ -265,7 +309,7 @@ type UserInfo struct {
 
 func (x *UserInfo) Reset() {
 	*x = UserInfo{}
-	mi := &file_api_uploader_v1_uploader_proto_msgTypes[4]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -277,7 +321,7 @@ func (x *UserInfo) String() string {
 func (*UserInfo) ProtoMessage() {}
 
 func (x *UserInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_api_uploader_v1_uploader_proto_msgTypes[4]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -290,7 +334,7 @@ func (x *UserInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserInfo.ProtoReflect.Descriptor instead.
 func (*UserInfo) Descriptor() ([]byte, []int) {
-	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{4}
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *UserInfo) GetEmail() string {
@@ -309,7 +353,7 @@ type FilesReply struct {
 
 func (x *FilesReply) Reset() {
 	*x = FilesReply{}
-	mi := &file_api_uploader_v1_uploader_proto_msgTypes[5]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -321,7 +365,7 @@ func (x *FilesReply) String() string {
 func (*FilesReply) ProtoMessage() {}
 
 func (x *FilesReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_uploader_v1_uploader_proto_msgTypes[5]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -334,7 +378,7 @@ func (x *FilesReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FilesReply.ProtoReflect.Descriptor instead.
 func (*FilesReply) Descriptor() ([]byte, []int) {
-	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{5}
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *FilesReply) GetFiles() []*File {
@@ -354,7 +398,7 @@ type FileByIdRequest struct {
 
 func (x *FileByIdRequest) Reset() {
 	*x = FileByIdRequest{}
-	mi := &file_api_uploader_v1_uploader_proto_msgTypes[6]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -366,7 +410,7 @@ func (x *FileByIdRequest) String() string {
 func (*FileByIdRequest) ProtoMessage() {}
 
 func (x *FileByIdRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_uploader_v1_uploader_proto_msgTypes[6]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -379,7 +423,7 @@ func (x *FileByIdRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FileByIdRequest.ProtoReflect.Descriptor instead.
 func (*FileByIdRequest) Descriptor() ([]byte, []int) {
-	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{6}
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *FileByIdRequest) GetEmail() string {
@@ -413,7 +457,7 @@ type File struct {
 
 func (x *File) Reset() {
 	*x = File{}
-	mi := &file_api_uploader_v1_uploader_proto_msgTypes[7]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -425,7 +469,7 @@ func (x *File) String() string {
 func (*File) ProtoMessage() {}
 
 func (x *File) ProtoReflect() protoreflect.Message {
-	mi := &file_api_uploader_v1_uploader_proto_msgTypes[7]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -438,7 +482,7 @@ func (x *File) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use File.ProtoReflect.Descriptor instead.
 func (*File) Descriptor() ([]byte, []int) {
-	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{7}
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *File) GetId() string {
@@ -514,7 +558,7 @@ type FileDeleteRequest struct {
 
 func (x *FileDeleteRequest) Reset() {
 	*x = FileDeleteRequest{}
-	mi := &file_api_uploader_v1_uploader_proto_msgTypes[8]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -526,7 +570,7 @@ func (x *FileDeleteRequest) String() string {
 func (*FileDeleteRequest) ProtoMessage() {}
 
 func (x *FileDeleteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_uploader_v1_uploader_proto_msgTypes[8]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -539,7 +583,7 @@ func (x *FileDeleteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FileDeleteRequest.ProtoReflect.Descriptor instead.
 func (*FileDeleteRequest) Descriptor() ([]byte, []int) {
-	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{8}
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *FileDeleteRequest) GetFileId() string {
@@ -566,7 +610,7 @@ type FileDownUrlRequest struct {
 
 func (x *FileDownUrlRequest) Reset() {
 	*x = FileDownUrlRequest{}
-	mi := &file_api_uploader_v1_uploader_proto_msgTypes[9]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -578,7 +622,7 @@ func (x *FileDownUrlRequest) String() string {
 func (*FileDownUrlRequest) ProtoMessage() {}
 
 func (x *FileDownUrlRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_uploader_v1_uploader_proto_msgTypes[9]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -591,7 +635,7 @@ func (x *FileDownUrlRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FileDownUrlRequest.ProtoReflect.Descriptor instead.
 func (*FileDownUrlRequest) Descriptor() ([]byte, []int) {
-	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{9}
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *FileDownUrlRequest) GetFileId() string {
@@ -617,7 +661,7 @@ type FileDownUrlReply struct {
 
 func (x *FileDownUrlReply) Reset() {
 	*x = FileDownUrlReply{}
-	mi := &file_api_uploader_v1_uploader_proto_msgTypes[10]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -629,7 +673,7 @@ func (x *FileDownUrlReply) String() string {
 func (*FileDownUrlReply) ProtoMessage() {}
 
 func (x *FileDownUrlReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_uploader_v1_uploader_proto_msgTypes[10]
+	mi := &file_api_uploader_v1_uploader_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -642,7 +686,7 @@ func (x *FileDownUrlReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FileDownUrlReply.ProtoReflect.Descriptor instead.
 func (*FileDownUrlReply) Descriptor() ([]byte, []int) {
-	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{10}
+	return file_api_uploader_v1_uploader_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *FileDownUrlReply) GetUrl() string {
@@ -673,7 +717,9 @@ const file_api_uploader_v1_uploader_proto_rawDesc = "" +
 	"\vStatusReply\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\tR\x06status\x12\x1a\n" +
 	"\bprogress\x18\x02 \x01(\rR\bprogress\x12\x18\n" +
-	"\amessage\x18\x03 \x01(\tR\amessage\" \n" +
+	"\amessage\x18\x03 \x01(\tR\amessage\"-\n" +
+	"\x13UploadedChunksReply\x12\x16\n" +
+	"\x06chunks\x18\x01 \x03(\rR\x06chunks\" \n" +
 	"\bUserInfo\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\"5\n" +
 	"\n" +
@@ -702,10 +748,11 @@ const file_api_uploader_v1_uploader_proto_rawDesc = "" +
 	"\afile_id\x18\x01 \x01(\tR\x06fileId\x12+\n" +
 	"\x03ttl\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\x03ttl\"$\n" +
 	"\x10FileDownUrlReply\x12\x10\n" +
-	"\x03url\x18\x01 \x01(\tR\x03url2\xa3\x03\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url2\xf1\x03\n" +
 	"\bUploader\x12C\n" +
 	"\vStartUpload\x12\x1a.uploader.v1.UploadRequest\x1a\x18.uploader.v1.UploadReply\x12B\n" +
-	"\x0fGetUploadStatus\x12\x15.uploader.v1.UploadID\x1a\x18.uploader.v1.StatusReply\x12:\n" +
+	"\x0fGetUploadStatus\x12\x15.uploader.v1.UploadID\x1a\x18.uploader.v1.StatusReply\x12L\n" +
+	"\x11GetUploadedChunks\x12\x15.uploader.v1.UploadID\x1a .uploader.v1.UploadedChunksReply\x12:\n" +
 	"\bGetFiles\x12\x15.uploader.v1.UserInfo\x1a\x17.uploader.v1.FilesReply\x12>\n" +
 	"\vGetFileById\x12\x1c.uploader.v1.FileByIdRequest\x1a\x11.uploader.v1.File\x12D\n" +
 	"\n" +
@@ -725,41 +772,44 @@ func file_api_uploader_v1_uploader_proto_rawDescGZIP() []byte {
 	return file_api_uploader_v1_uploader_proto_rawDescData
 }
 
-var file_api_uploader_v1_uploader_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_api_uploader_v1_uploader_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_api_uploader_v1_uploader_proto_goTypes = []any{
 	(*UploadRequest)(nil),         // 0: uploader.v1.UploadRequest
 	(*UploadID)(nil),              // 1: uploader.v1.UploadID
 	(*UploadReply)(nil),           // 2: uploader.v1.UploadReply
 	(*StatusReply)(nil),           // 3: uploader.v1.StatusReply
-	(*UserInfo)(nil),              // 4: uploader.v1.UserInfo
-	(*FilesReply)(nil),            // 5: uploader.v1.FilesReply
-	(*FileByIdRequest)(nil),       // 6: uploader.v1.FileByIdRequest
-	(*File)(nil),                  // 7: uploader.v1.File
-	(*FileDeleteRequest)(nil),     // 8: uploader.v1.FileDeleteRequest
-	(*FileDownUrlRequest)(nil),    // 9: uploader.v1.FileDownUrlRequest
-	(*FileDownUrlReply)(nil),      // 10: uploader.v1.FileDownUrlReply
-	(*timestamppb.Timestamp)(nil), // 11: google.protobuf.Timestamp
-	(*durationpb.Duration)(nil),   // 12: google.protobuf.Duration
-	(*emptypb.Empty)(nil),         // 13: google.protobuf.Empty
+	(*UploadedChunksReply)(nil),   // 4: uploader.v1.UploadedChunksReply
+	(*UserInfo)(nil),              // 5: uploader.v1.UserInfo
+	(*FilesReply)(nil),            // 6: uploader.v1.FilesReply
+	(*FileByIdRequest)(nil),       // 7: uploader.v1.FileByIdRequest
+	(*File)(nil),                  // 8: uploader.v1.File
+	(*FileDeleteRequest)(nil),     // 9: uploader.v1.FileDeleteRequest
+	(*FileDownUrlRequest)(nil),    // 10: uploader.v1.FileDownUrlRequest
+	(*FileDownUrlReply)(nil),      // 11: uploader.v1.FileDownUrlReply
+	(*timestamppb.Timestamp)(nil), // 12: google.protobuf.Timestamp
+	(*durationpb.Duration)(nil),   // 13: google.protobuf.Duration
+	(*emptypb.Empty)(nil),         // 14: google.protobuf.Empty
 }
 var file_api_uploader_v1_uploader_proto_depIdxs = []int32{
-	7,  // 0: uploader.v1.FilesReply.files:type_name -> uploader.v1.File
-	11, // 1: uploader.v1.File.created_at:type_name -> google.protobuf.Timestamp
-	12, // 2: uploader.v1.FileDownUrlRequest.ttl:type_name -> google.protobuf.Duration
+	8,  // 0: uploader.v1.FilesReply.files:type_name -> uploader.v1.File
+	12, // 1: uploader.v1.File.created_at:type_name -> google.protobuf.Timestamp
+	13, // 2: uploader.v1.FileDownUrlRequest.ttl:type_name -> google.protobuf.Duration
 	0,  // 3: uploader.v1.Uploader.StartUpload:input_type -> uploader.v1.UploadRequest
 	1,  // 4: uploader.v1.Uploader.GetUploadStatus:input_type -> uploader.v1.UploadID
-	4,  // 5: uploader.v1.Uploader.GetFiles:input_type -> uploader.v1.UserInfo
-	6,  // 6: uploader.v1.Uploader.GetFileById:input_type -> uploader.v1.FileByIdRequest
-	8,  // 7: uploader.v1.Uploader.DeleteFile:input_type -> uploader.v1.FileDeleteRequest
-	9,  // 8: uploader.v1.Uploader.GetDownUrl:input_type -> uploader.v1.FileDownUrlRequest
-	2,  // 9: uploader.v1.Uploader.StartUpload:output_type -> uploader.v1.UploadReply
-	3,  // 10: uploader.v1.Uploader.GetUploadStatus:output_type -> uploader.v1.StatusReply
-	5,  // 11: uploader.v1.Uploader.GetFiles:output_type -> uploader.v1.FilesReply
-	7,  // 12: uploader.v1.Uploader.GetFileById:output_type -> uploader.v1.File
-	13, // 13: uploader.v1.Uploader.DeleteFile:output_type -> google.protobuf.Empty
-	10, // 14: uploader.v1.Uploader.GetDownUrl:output_type -> uploader.v1.FileDownUrlReply
-	9,  // [9:15] is the sub-list for method output_type
-	3,  // [3:9] is the sub-list for method input_type
+	1,  // 5: uploader.v1.Uploader.GetUploadedChunks:input_type -> uploader.v1.UploadID
+	5,  // 6: uploader.v1.Uploader.GetFiles:input_type -> uploader.v1.UserInfo
+	7,  // 7: uploader.v1.Uploader.GetFileById:input_type -> uploader.v1.FileByIdRequest
+	9,  // 8: uploader.v1.Uploader.DeleteFile:input_type -> uploader.v1.FileDeleteRequest
+	10, // 9: uploader.v1.Uploader.GetDownUrl:input_type -> uploader.v1.FileDownUrlRequest
+	2,  // 10: uploader.v1.Uploader.StartUpload:output_type -> uploader.v1.UploadReply
+	3,  // 11: uploader.v1.Uploader.GetUploadStatus:output_type -> uploader.v1.StatusReply
+	4,  // 12: uploader.v1.Uploader.GetUploadedChunks:output_type -> uploader.v1.UploadedChunksReply
+	6,  // 13: uploader.v1.Uploader.GetFiles:output_type -> uploader.v1.FilesReply
+	8,  // 14: uploader.v1.Uploader.GetFileById:output_type -> uploader.v1.File
+	14, // 15: uploader.v1.Uploader.DeleteFile:output_type -> google.protobuf.Empty
+	11, // 16: uploader.v1.Uploader.GetDownUrl:output_type -> uploader.v1.FileDownUrlReply
+	10, // [10:17] is the sub-list for method output_type
+	3,  // [3:10] is the sub-list for method input_type
 	3,  // [3:3] is the sub-list for extension type_name
 	3,  // [3:3] is the sub-list for extension extendee
 	0,  // [0:3] is the sub-list for field type_name
@@ -776,7 +826,7 @@ func file_api_uploader_v1_uploader_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_uploader_v1_uploader_proto_rawDesc), len(file_api_uploader_v1_uploader_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

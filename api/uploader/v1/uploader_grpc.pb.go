@@ -20,12 +20,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Uploader_StartUpload_FullMethodName     = "/uploader.v1.Uploader/StartUpload"
-	Uploader_GetUploadStatus_FullMethodName = "/uploader.v1.Uploader/GetUploadStatus"
-	Uploader_GetFiles_FullMethodName        = "/uploader.v1.Uploader/GetFiles"
-	Uploader_GetFileById_FullMethodName     = "/uploader.v1.Uploader/GetFileById"
-	Uploader_DeleteFile_FullMethodName      = "/uploader.v1.Uploader/DeleteFile"
-	Uploader_GetDownUrl_FullMethodName      = "/uploader.v1.Uploader/GetDownUrl"
+	Uploader_StartUpload_FullMethodName       = "/uploader.v1.Uploader/StartUpload"
+	Uploader_GetUploadStatus_FullMethodName   = "/uploader.v1.Uploader/GetUploadStatus"
+	Uploader_GetUploadedChunks_FullMethodName = "/uploader.v1.Uploader/GetUploadedChunks"
+	Uploader_GetFiles_FullMethodName          = "/uploader.v1.Uploader/GetFiles"
+	Uploader_GetFileById_FullMethodName       = "/uploader.v1.Uploader/GetFileById"
+	Uploader_DeleteFile_FullMethodName        = "/uploader.v1.Uploader/DeleteFile"
+	Uploader_GetDownUrl_FullMethodName        = "/uploader.v1.Uploader/GetDownUrl"
 )
 
 // UploaderClient is the client API for Uploader service.
@@ -38,6 +39,8 @@ type UploaderClient interface {
 	StartUpload(ctx context.Context, in *UploadRequest, opts ...grpc.CallOption) (*UploadReply, error)
 	// gets current upload status
 	GetUploadStatus(ctx context.Context, in *UploadID, opts ...grpc.CallOption) (*StatusReply, error)
+	// gets already uploaded chunks
+	GetUploadedChunks(ctx context.Context, in *UploadID, opts ...grpc.CallOption) (*UploadedChunksReply, error)
 	// gets all user's files
 	GetFiles(ctx context.Context, in *UserInfo, opts ...grpc.CallOption) (*FilesReply, error)
 	// gets file by id
@@ -70,6 +73,16 @@ func (c *uploaderClient) GetUploadStatus(ctx context.Context, in *UploadID, opts
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(StatusReply)
 	err := c.cc.Invoke(ctx, Uploader_GetUploadStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *uploaderClient) GetUploadedChunks(ctx context.Context, in *UploadID, opts ...grpc.CallOption) (*UploadedChunksReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UploadedChunksReply)
+	err := c.cc.Invoke(ctx, Uploader_GetUploadedChunks_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -126,6 +139,8 @@ type UploaderServer interface {
 	StartUpload(context.Context, *UploadRequest) (*UploadReply, error)
 	// gets current upload status
 	GetUploadStatus(context.Context, *UploadID) (*StatusReply, error)
+	// gets already uploaded chunks
+	GetUploadedChunks(context.Context, *UploadID) (*UploadedChunksReply, error)
 	// gets all user's files
 	GetFiles(context.Context, *UserInfo) (*FilesReply, error)
 	// gets file by id
@@ -149,6 +164,9 @@ func (UnimplementedUploaderServer) StartUpload(context.Context, *UploadRequest) 
 }
 func (UnimplementedUploaderServer) GetUploadStatus(context.Context, *UploadID) (*StatusReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUploadStatus not implemented")
+}
+func (UnimplementedUploaderServer) GetUploadedChunks(context.Context, *UploadID) (*UploadedChunksReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetUploadedChunks not implemented")
 }
 func (UnimplementedUploaderServer) GetFiles(context.Context, *UserInfo) (*FilesReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetFiles not implemented")
@@ -215,6 +233,24 @@ func _Uploader_GetUploadStatus_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UploaderServer).GetUploadStatus(ctx, req.(*UploadID))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Uploader_GetUploadedChunks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UploadID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UploaderServer).GetUploadedChunks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Uploader_GetUploadedChunks_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UploaderServer).GetUploadedChunks(ctx, req.(*UploadID))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -305,6 +341,10 @@ var Uploader_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUploadStatus",
 			Handler:    _Uploader_GetUploadStatus_Handler,
+		},
+		{
+			MethodName: "GetUploadedChunks",
+			Handler:    _Uploader_GetUploadedChunks_Handler,
 		},
 		{
 			MethodName: "GetFiles",

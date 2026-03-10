@@ -13,6 +13,8 @@ service Uploader {
   rpc StartUpload (UploadRequest) returns (UploadReply);
     // gets current upload status
   rpc GetUploadStatus (UploadID) returns (StatusReply);
+  // gets already uploaded chunks
+  rpc GetUploadedChunks (UploadID) returns (UploadedChunksReply);
   // gets all user's files
   rpc GetFiles (UserInfo) returns (FilesReply);
   // gets file by id
@@ -44,6 +46,10 @@ message StatusReply{
   string status   = 1;
   uint32 progress = 2;
   string message  = 3;
+}
+
+message UploadedChunksReply{
+  repeated uint32 chunks = 1;
 }
 
 message UserInfo {
